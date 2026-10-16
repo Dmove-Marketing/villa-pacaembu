@@ -1,17 +1,17 @@
 {
-  "project_name": "PREENCHER — Nome do projeto",
-  "project_slug": "preencher-slug",
-  "domain": "eventos.cliente.com.br",
-  "client": "PREENCHER — Cliente",
-  "environment": "development",
+  "project_name": "Villa Pacaembu",
+  "project_slug": "villa-pacaembu",
+  "domain": "eventos.villapacaembu.com.br",
+  "client": "Villa Pacaembu",
+  "environment": "production",
   "tracking": {
     "gtm_id": "GTM-XXXXXXX",
-    "enabled": true
+    "enabled": false
   },
   "whatsapp": {
-    "phone": "5511900000000",
-    "display_name": "PREENCHER — Cliente",
-    "avatar": "/images/whatsapp-avatar.jpg",
+    "phone": "5511993560971",
+    "display_name": "Villa Pacaembu",
+    "avatar": "https://media.dmove.com.br/clients/villa-pacaembu/photos/favicon.webp",
     "enabled": true
   },
   "forms": {
@@ -20,21 +20,21 @@
       "preset": "social",
       "redirect_on_success": "",
       "webhooks": [
-        "https://server3n8n.dmove.com.br/webhook/preencher-slug"
+        "https://server3n8n.dmove.com.br/webhook/villa-pacaembu"
       ]
     }
   },
   "media": {
-    "cdn_base": "https://media.dmove.com.br/clients/preencher-slug"
+    "cdn_base": "https://media.dmove.com.br/clients/villa-pacaembu"
   },
   "deploy": {
     "user": "root",
     "server": "157.173.197.116",
-    "remote_path": "/var/www/eventos.cliente.com.br"
+    "remote_path": "/var/www/eventos.villapacaembu.com.br"
   },
   "meta": {
-    "created_at": "",
-    "last_updated": "",
+    "created_at": "2026-10-16",
+    "last_updated": "2026-10-16",
     "owner": "Dmove"
   }
 }

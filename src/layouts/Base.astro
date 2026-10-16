@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import '../styles/projeto.css';
 import GTMHead from '../components/tracking/GTMHead.astro';
 import GTMBody from '../components/tracking/GTMBody.astro';
 import UTMCapture from '../components/tracking/UTMCapture.astro';
@@ -73,6 +74,11 @@ const defaultJsonLd = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Fontes do projeto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wdth,wght@62.5,500;62.5,600&family=Inter:wght@400;500;600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
     <link rel="preconnect" href="https://media.dmove.com.br" crossorigin />
     <link rel="dns-prefetch" href="https://media.dmove.com.br" />
     <link rel="preconnect" href="https://capi-automation.s3.us-east-2.amazonaws.com" crossorigin />
@@ -92,9 +98,11 @@ const defaultJsonLd = {
     <meta property="og:locale" content="pt_BR" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/images/icone.png" />
-    <link rel="shortcut icon" href="/images/icone.png" />
-    <link rel="apple-touch-icon" href="/images/icone.png" />
+    {(() => { const fav = `${config.media.cdn_base}/photos/favicon.webp`; return (<>
+      <link rel="icon" type="image/webp" href={fav} />
+      <link rel="shortcut icon" href={fav} />
+      <link rel="apple-touch-icon" href={fav} />
+    </>); })()}
 
     <!-- GTM Head -->
     {trackingEnabled && gtmId && <GTMHead gtmId={gtmId} />}
@@ -104,7 +112,7 @@ const defaultJsonLd = {
 
     <slot name="head" />
   </head>
-  <body>
+  <body class="sem-js">
     <!-- GTM Body noscript -->
     {trackingEnabled && gtmId && <GTMBody gtmId={gtmId} />}
 

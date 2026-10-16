@@ -1,0 +1,737 @@
+---
+import Base from '../layouts/Base.astro';
+import { getPreset } from '../scripts/form-presets';
+import config from '../../config.json';
+
+const CDN    = config.media.cdn_base;
+const LOGO   = `${CDN}/photos/logo-villa-pacaembu.svg`;
+const TRACO  = `${CDN}/photos/traco-empena.svg`;
+const p      = (n: string) => `${CDN}/photos/${n}`;
+
+const submitUrl = config.forms['lead-form'].webhooks[0];
+const formId    = config.forms['lead-form'].id;
+const campos    = getPreset('corporativo');
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'EventVenue',
+  name: 'Villa Pacaembu',
+  description: 'Espaço completo para eventos corporativos na Barra Funda, São Paulo.',
+  url: `https://${config.domain}/eventos-corporativos`,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'R. James Holland, 228',
+    addressLocality: 'São Paulo',
+    addressRegion: 'SP',
+    postalCode: '01138-000',
+    addressCountry: 'BR',
+  },
+};
+---
+
+<Base
+  title="Eventos corporativos na Barra Funda | Villa Pacaembu"
+  description="Ambientes versáteis e arquitetura histórica para encontros que vão além da sala de reunião. Espaço completo para eventos corporativos na Barra Funda, São Paulo."
+  ogImage={p('hero-salao-corporativo.webp')}
+  canonical={`https://${config.domain}/eventos-corporativos`}
+  jsonLd={jsonLd}
+  whatsAppShowEmpresaField={true}
+>
+
+<style>
+  /* ── Hero ─────────────────────────────────────────────── */
+  .hero {
+    position: relative; min-height: 100svh;
+    display: flex; align-items: flex-start;
+    padding-bottom: clamp(48px, 8vh, 96px);
+    background: var(--cor-ferro); color: var(--cor-texto-claro);
+    overflow: hidden;
+  }
+  .hero__foto { position: absolute; inset: 0; height: 100%; }
+  .hero__foto::before {
+    content: ""; position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(180deg, rgba(36,32,28,.15) 0%, rgba(36,32,28,.05) 50%, rgba(36,32,28,.55) 100%);
+  }
+  .hero__flamula {
+    position: relative; z-index: 3;
+    width: min(46%, 600px); margin-left: auto; margin-right: 6vw;
+    padding: clamp(32px,4.5vh,52px) clamp(32px,4vw,60px) clamp(96px,14vh,150px);
+    animation: flamula-desce 1.3s var(--transicao) .15s both;
+  }
+  .hero__flamula::before, .hero__flamula::after {
+    content: ""; position: absolute; left: 0; right: 0; top: 0;
+    clip-path: polygon(0 0, 100% 0, 100% 74%, 0 100%);
+  }
+  .hero__flamula::before {
+    bottom: -4px; background: var(--cor-pessego);
+    clip-path: polygon(0 calc(100% - 4px), 100% calc(74% - 3px), 100% 74%, 0 100%);
+  }
+  .hero__flamula::after {
+    bottom: 0; background: rgba(122,60,36,.86);
+    -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
+  }
+  .hero__flamula > * { position: relative; z-index: 1; }
+  @keyframes flamula-desce { from { transform: translateY(-105%); } to { transform: none; } }
+
+  .hero__logo { width: clamp(120px,11vw,152px); margin: 0 auto clamp(28px,5vh,48px); }
+  .hero h1 { margin-bottom: 24px; }
+  .hero__texto {
+    max-width: 30em; font-size: clamp(1rem,1.25vw,1.12rem); line-height: 1.35;
+    color: rgba(244,237,227,.88); margin-bottom: 32px;
+    padding-left: 14px; border-left: 1px solid var(--cor-pessego);
+  }
+  .hero .botao { min-height: 40px; padding: 10px 18px; font-size: .76rem; }
+  .hero .anima-entrada { animation: sobe .9s var(--transicao) both; }
+  .hero .anima-entrada:nth-child(2) { animation-delay: .9s; }
+  .hero .anima-entrada:nth-child(3) { animation-delay: 1.05s; }
+  .hero .anima-entrada:nth-child(4) { animation-delay: 1.2s; }
+  @keyframes sobe { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+
+  /* ── Autoridade ────────────────────────────────────────── */
+  .autoridade { background: var(--cor-ferro); color: var(--cor-texto-claro); padding: clamp(36px,5vw,64px) 0; }
+  .tempo { position: relative; list-style: none; margin: 0; padding: 28px 0 0; display: grid; grid-template-columns: repeat(3,1fr); }
+  .tempo::before { content: ""; position: absolute; left: 0; right: 0; top: 6px; height: 1px; background: var(--cor-linha-clara); }
+  .tempo::after  { content: ""; position: absolute; left: 0; right: 0; top: 5px; height: 3px; background: var(--cor-pessego); transform: scaleX(0); transform-origin: left; transition: transform 2.4s var(--transicao); }
+  .tempo.ativo::after { transform: scaleX(1); }
+  .tempo__item { position: relative; padding-right: 24px; }
+  .tempo__ponto { position: absolute; top: -28px; left: 0; width: 13px; height: 13px; border-radius: 50%; background: var(--cor-ferro); border: 1px solid var(--cor-linha-clara); transition: background .3s, border-color .3s; transition-delay: calc(var(--i) * .8s); }
+  .tempo.ativo .tempo__ponto { background: var(--cor-pessego); border-color: var(--cor-pessego); }
+  .tempo__mascara { display: block; overflow: hidden; }
+  .tempo__num { display: block; font-family: var(--fonte-titulo); font-stretch: 62.5%; font-weight: 600; font-size: clamp(2.8rem,5.6vw,4.8rem); line-height: 1.02; color: var(--cor-pessego); transform: translateY(105%); transition: transform .9s var(--transicao) calc(var(--i) * .8s); }
+  .tempo.ativo .tempo__num { transform: none; }
+  .tempo__rotulo { display: block; margin-top: 6px; font: 500 .85rem/1.3 var(--fonte-apoio); letter-spacing: .08em; text-transform: uppercase; color: var(--cor-traco); opacity: 0; transition: opacity .6s calc(var(--i) * .8s + .3s); }
+  .tempo.ativo .tempo__rotulo { opacity: 1; }
+  .sem-js .tempo::after { transform: none; }
+  .sem-js .tempo__num  { transform: none; }
+  .sem-js .tempo__rotulo { opacity: 1; }
+  .sem-js .tempo__ponto  { background: var(--cor-pessego); border-color: var(--cor-pessego); }
+
+  /* ── Experiência ───────────────────────────────────────── */
+  .experiencia { padding: var(--secao) 0; }
+  .experiencia__grade { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(40px,7vw,112px); align-items: center; }
+  .experiencia__texto .legenda { margin-bottom: 24px; }
+  .experiencia__texto h2 { margin-bottom: 28px; }
+  .experiencia__texto p  { font-size: clamp(1.02rem,1.3vw,1.15rem); color: var(--cor-texto-suave); max-width: 34em; }
+  .experiencia__midia { position: relative; }
+  .experiencia__midia .foto { aspect-ratio: 4 / 5; }
+  .experiencia__midia .foto > img { object-position: 60% 50%; }
+  .experiencia__cota { position: absolute; right: -28px; top: 0; bottom: 0; width: 12px; border-top: 1px solid var(--cor-oliva); border-bottom: 1px solid var(--cor-oliva); }
+  .experiencia__cota::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--cor-oliva); }
+
+  /* ── Galeria ───────────────────────────────────────────── */
+  .galeria { padding: var(--secao) 0; background: var(--cor-creme-escuro); }
+  .galeria h2 { max-width: 22em; font-size: clamp(1.9rem,3.4vw,3rem); margin-bottom: clamp(40px,5vw,64px); }
+  .galeria h2 .destaque { color: var(--cor-terracota); }
+  .galeria .carrossel {
+    padding-left: max(var(--margem), calc((100vw - var(--largura-max)) / 2 + var(--margem)));
+    scroll-padding-left: max(var(--margem), calc((100vw - var(--largura-max)) / 2 + var(--margem)));
+  }
+  .galeria .carrossel::after { content: ""; flex: 0 0 1px; }
+  .galeria__item { margin: 0; }
+  .galeria__item .foto    { height: clamp(320px,48vw,560px); }
+  .galeria__item--h .foto { width: clamp(300px,64vw,840px); }
+  .galeria__item--v .foto { width: clamp(240px,36vw,448px); }
+  .galeria .carrossel-controles { color: var(--cor-terracota); }
+
+  /* ── Eventos (formatos) ────────────────────────────────── */
+  .eventos { padding: var(--secao) 0; background: var(--cor-creme); }
+  .cabecalho-secao { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px,5vw,80px); align-items: end; margin-bottom: clamp(40px,6vw,72px); }
+  .cabecalho-secao .legenda { margin-bottom: 20px; }
+  .eventos .texto-intro { font-size: clamp(1.02rem,1.3vw,1.12rem); max-width: none; }
+  @media (min-width: 1080px) {
+    .eventos .cabecalho-secao { grid-template-columns: .82fr 1.18fr; }
+    .eventos .texto-intro { justify-self: end; }
+    .linha-inteira { white-space: nowrap; }
+  }
+  .eventos__lista { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5,1fr); border-top: 1px solid var(--cor-linha); border-left: 1px solid var(--cor-linha); }
+  .evento { position: relative; isolation: isolate; overflow: hidden; min-height: 260px; padding: 28px 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 32px; border-right: 1px solid var(--cor-linha); border-bottom: 1px solid var(--cor-linha); transition: color .45s var(--transicao); }
+  .evento::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--cor-terracota); transform: translateY(101%); transition: transform .55s var(--transicao); }
+  @media (hover: hover) {
+    .evento:hover { color: var(--cor-texto-claro); }
+    .evento:hover::before { transform: none; }
+    .evento:hover .evento__numero { color: var(--cor-pessego); }
+    .evento:hover .evento__icone  { color: var(--cor-pessego); }
+  }
+  .evento__numero { font: 500 .8rem/1 var(--fonte-apoio); letter-spacing: .08em; color: var(--cor-texto-suave); transition: color .45s; }
+  @media (min-width: 641px) {
+    .evento { justify-content: center; align-items: center; text-align: center; gap: 24px; padding: 56px 20px 40px; }
+    .evento__numero { position: absolute; top: 24px; left: 24px; }
+  }
+  .evento__icone { width: 52px; height: 52px; color: var(--cor-terracota); transition: color .45s; }
+  .evento__nome  { font-family: var(--fonte-titulo); font-stretch: 62.5%; font-weight: 600; font-size: clamp(1.2rem,1.45vw,1.5rem); line-height: 1.02; text-transform: uppercase; }
+
+  /* ── Diferenciais ──────────────────────────────────────── */
+  .diferenciais { padding: var(--secao) 0; background: var(--cor-creme-escuro); }
+  .diferenciais h2 { max-width: 12em; margin-bottom: clamp(40px,5vw,64px); }
+  .abas { display: grid; grid-template-columns: 1fr 1.15fr; gap: clamp(32px,5vw,72px); align-items: center; }
+  .abas__lista { border-top: 1px solid var(--cor-linha); }
+  .aba { position: relative; border-bottom: 1px solid var(--cor-linha); }
+  .aba h3 { margin: 0; }
+  .aba__botao { display: flex; align-items: baseline; gap: 18px; width: 100%; padding: 22px 0; text-align: left; background: none; border: 0; cursor: pointer; color: inherit; font: inherit; }
+  .aba__botao:focus-visible { outline: 2px solid var(--cor-terracota); outline-offset: 4px; }
+  .aba__numero { font-family: var(--fonte-titulo); font-stretch: 62.5%; font-weight: 500; font-size: 2rem; line-height: 1; color: rgba(122,60,36,.35); transition: color .3s; }
+  .aba__titulo { font-family: var(--fonte-titulo); font-stretch: 62.5%; font-weight: 600; text-transform: uppercase; font-size: clamp(1.45rem,2vw,1.9rem); line-height: 1; color: rgba(43,36,32,.45); transition: color .3s; }
+  .aba.ativo .aba__numero  { color: var(--cor-pessego); }
+  .aba.ativo .aba__titulo, .aba__botao:hover .aba__titulo { color: var(--cor-texto); }
+  .aba__texto { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s var(--transicao); }
+  .aba__texto > p { overflow: hidden; margin: 0; padding-left: 50px; color: var(--cor-texto-suave); }
+  .aba.ativo .aba__texto  { grid-template-rows: 1fr; }
+  .aba.ativo .aba__texto > p { padding-bottom: 22px; margin-top: -8px; }
+  .aba__barra { position: absolute; left: 0; bottom: -1px; height: 2px; width: 100%; background: var(--cor-terracota); transform: scaleX(0); transform-origin: left; }
+  .abas.rodando .aba.ativo .aba__barra { animation: aba-barra 6s linear forwards; }
+  .abas.pausado .aba.ativo .aba__barra { animation-play-state: paused; }
+  @keyframes aba-barra { to { transform: scaleX(1); } }
+  .abas__fotos { position: relative; aspect-ratio: 5 / 4; overflow: hidden; background: var(--cor-ferro); }
+  .abas__fotos img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.04); transition: opacity .8s var(--transicao), transform 1.4s var(--transicao); }
+  .abas__fotos img.ativo { opacity: 1; transform: none; }
+
+  /* ── Gastronomia ───────────────────────────────────────── */
+  .gastronomia { position: relative; overflow: hidden; background: var(--cor-terracota); color: var(--cor-texto-claro); padding: var(--secao) 0; }
+  .gastronomia__grade { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(40px,7vw,112px); align-items: center; }
+  .gastronomia__midia .foto { aspect-ratio: 4 / 5; }
+  .slides > img { position: absolute; inset: 0; opacity: 0; transition: opacity 1s var(--transicao); }
+  .slides > img.ativo { opacity: 1; }
+  .slides__pontos { display: flex; gap: 8px; margin-top: 16px; }
+  .slides__ponto { width: 28px; height: 3px; padding: 0; border: 0; border-radius: 2px; background: rgba(244,237,227,.3); cursor: pointer; transition: background .3s, width .3s; }
+  .slides__ponto.ativo { background: var(--cor-pessego); width: 44px; }
+  .slides__seta { display: none; }
+  .slides__ponto:focus-visible { outline: 2px solid var(--cor-pessego); outline-offset: 3px; }
+  .gastronomia h2  { margin: 24px 0 28px; }
+  .gastronomia p   { color: rgba(244,237,227,.86); font-size: clamp(1.02rem,1.3vw,1.15rem); max-width: 32em; margin-bottom: 36px; }
+  .gastronomia__traco { position: absolute; left: 68%; top: 50%; transform: translate(-50%,-50%); width: min(78vw,980px); opacity: .08; pointer-events: none; }
+
+  /* ── Parceiros ─────────────────────────────────────────── */
+  .parceiros { padding: var(--secao) 0; }
+  .parceiros__logos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4,1fr); border-top: 1px solid var(--cor-linha); border-left: 1px solid var(--cor-linha); }
+  .parceiros__logos li { display: grid; place-items: center; aspect-ratio: 16/9; padding: 24px; border-right: 1px solid var(--cor-linha); border-bottom: 1px solid var(--cor-linha); }
+  .parceiros__logos img { max-height: 56px; width: auto; object-fit: contain; }
+  .logo-ph { font: 500 .72rem/1.3 var(--fonte-apoio); letter-spacing: .06em; color: var(--cor-texto-suave); text-align: center; }
+
+  /* ── Depoimentos ───────────────────────────────────────── */
+  .depoimentos { padding: var(--secao) 0; background: var(--cor-ferro); color: var(--cor-texto-claro); overflow: hidden; }
+  .depoimentos__cabecalho { text-align: center; }
+  .depoimentos h2 { max-width: 16em; }
+  .depoimento { width: min(420px,84vw); padding: 32px; display: flex; flex-direction: column; gap: 20px; border: 1px solid var(--cor-linha-clara); }
+  .depoimento__estrelas { color: var(--cor-pessego); letter-spacing: .2em; font-size: 1rem; }
+  .depoimento blockquote { margin: 0; font-size: 1.05rem; color: rgba(244,237,227,.9); }
+  .depoimento figcaption { margin-top: auto; display: flex; flex-direction: column; gap: 2px; font: 500 .9rem/1.3 var(--fonte-apoio); }
+  .depoimento figcaption span { font-weight: 400; color: rgba(244,237,227,.6); font-size: .82rem; }
+
+  /* ── Contato ───────────────────────────────────────────── */
+  .contato { position: relative; padding: var(--secao) 0; background: var(--cor-terracota); color: var(--cor-texto-claro); overflow: hidden; }
+  .contato__grade { position: relative; z-index: 1; display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(40px,6vw,96px); align-items: start; }
+  .contato h2 { margin: 24px 0 24px; }
+  .endereco { display: flex; gap: 14px; align-items: center; max-width: 26em; margin: 72px 0 0; font-size: 1rem; color: var(--cor-texto-claro); }
+  .endereco svg { flex: none; width: 22px; height: 22px; color: var(--cor-pessego); }
+  .endereco__link { color: inherit; text-decoration: underline; text-decoration-color: rgba(234,163,132,.55); text-underline-offset: 4px; transition: color .3s, text-decoration-color .3s; }
+  .endereco__link:hover { color: var(--cor-pessego); text-decoration-color: var(--cor-pessego); }
+  .contato__intro p { color: rgba(244,237,227,.86); font-size: clamp(1.02rem,1.3vw,1.15rem); max-width: 26em; }
+
+  /* ── Formulário ────────────────────────────────────────── */
+  .formulario { background: var(--cor-creme); color: var(--cor-texto); padding: clamp(24px,4vw,48px); display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  #form-campos { display: contents; }
+  .campo { display: flex; flex-direction: column; gap: 8px; }
+  .campo--inteiro { grid-column: 1 / -1; }
+  .campo label { font: 500 .8rem/1.2 var(--fonte-apoio); letter-spacing: .06em; text-transform: uppercase; color: var(--cor-texto-suave); }
+  .campo label .opcional { text-transform: none; letter-spacing: 0; font-weight: 400; }
+  .campo input, .campo select, .campo textarea {
+    width: 100%; min-height: 52px; padding: 14px 16px;
+    font: 400 16px/1.3 var(--fonte-texto); color: var(--cor-texto);
+    background: #fff; border: 1px solid rgba(36,32,28,.22); border-radius: 0;
+    transition: border-color .25s, box-shadow .25s; -webkit-appearance: none; appearance: none;
+  }
+  .campo select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%237a3c24' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
+  .campo textarea { min-height: 112px; resize: vertical; }
+  .campo input:focus, .campo select:focus, .campo textarea:focus { outline: none; border-color: var(--cor-terracota); box-shadow: 0 0 0 3px rgba(122,60,36,.15); }
+  .formulario .botao { grid-column: 1 / -1; width: 100%; margin-top: 8px; }
+  #form-sucesso { display: none; }
+  #form-sucesso.active { display: flex; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; }
+  #form-sucesso p { font-size: 1.1rem; color: var(--cor-texto); }
+
+  /* ── Rodapé ────────────────────────────────────────────── */
+  .rodape { background: var(--cor-ferro); color: rgba(244,237,227,.6); padding: 40px 0 28px; }
+  .rodape__conteudo { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+  .rodape__logo { width: 110px; margin-bottom: 6px; filter: brightness(0) invert(1); }
+  .rodape__direitos, .rodape__credito { margin: 0; font-size: .8rem; }
+  .rodape__credito { display: flex; align-items: center; gap: 10px; }
+  .rodape__dmove { display: block; transition: opacity .25s; }
+  .rodape__dmove:hover { opacity: .75; }
+  .rodape__dmove img { width: 64px; height: auto; }
+
+  /* ── Responsivo ────────────────────────────────────────── */
+  @media (max-width: 1100px) {
+    .eventos__lista  { grid-template-columns: repeat(3,1fr); }
+    .parceiros__logos { grid-template-columns: repeat(3,1fr); }
+  }
+  @media (max-width: 959px) {
+    .titulo--secao { font-size: clamp(1.8rem,8vw,2.1rem); }
+    .galeria h2    { font-size: clamp(1.45rem,6.4vw,1.7rem); }
+    section p, .aba__texto > p { line-height: 1.42; }
+    .experiencia__texto h2, .gastronomia h2, .contato h2 { margin-bottom: 14px; }
+    .gastronomia__texto { text-align: center; }
+    .gastronomia__traco { display: none; }
+    .diferenciais .legenda, .galeria .legenda { display: flex; width: fit-content; margin-left: auto; margin-right: auto; }
+    .diferenciais h2, .galeria h2 { text-align: center; margin-left: auto; margin-right: auto; }
+    .contato__intro { text-align: center; }
+    .contato__intro p { margin-left: auto; margin-right: auto; }
+    .endereco { justify-content: center; text-align: left; margin: 28px auto 0; }
+    .parceiros .cabecalho-secao { text-align: center; justify-items: center; }
+    .parceiros .texto-intro { margin: 0 auto; }
+    .gastronomia p  { margin-left: auto; margin-right: auto; margin-bottom: 24px; }
+    .gastronomia .botao { min-height: 40px; padding: 10px 18px; font-size: .72rem; }
+    .slides__pontos { justify-content: center; }
+    .slides__seta {
+      display: grid; place-items: center; position: absolute; z-index: 2; top: 50%; transform: translateY(-50%);
+      width: 40px; height: 40px; padding: 0; border-radius: 50%; cursor: pointer;
+      background: rgba(36,32,28,.45); color: var(--cor-creme); border: 1px solid rgba(244,237,227,.55);
+      -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+    }
+    .slides__seta--anterior { left: 12px; }
+    .slides__seta--proxima  { right: 12px; }
+    .cabecalho-secao { gap: 14px; }
+    .hero { min-height: 100svh; align-items: center; padding-bottom: 0; }
+    .hero__foto::before { background: linear-gradient(180deg, rgba(36,32,28,.2) 0%, rgba(36,32,28,.62) 28%, rgba(36,32,28,.78) 50%, rgba(36,32,28,.62) 72%, rgba(36,32,28,.35) 100%); }
+    .hero__foto img { transform: scale(1.18); transform-origin: 50% 95%; }
+    .hero__flamula { width: 100%; margin: 0; padding: 0 22px; text-align: center; animation: none; }
+    .hero__flamula::before, .hero__flamula::after { display: none; }
+    .hero__logo { width: 84px; margin: 0 auto 18px; }
+    .hero .titulo--grande { font-size: clamp(1.85rem,8.4vw,2.3rem); }
+    .hero h1 { margin-bottom: 14px; }
+    .hero__texto { border-left: 0; padding: 0; margin: 0 auto 22px; font-size: .88rem; }
+    .hero .botao { min-height: 40px; padding: 10px 18px; font-size: .72rem; }
+    .experiencia__grade, .gastronomia__grade, .contato__grade, .cabecalho-secao { grid-template-columns: 1fr; }
+    .experiencia__midia { margin-right: 28px; }
+    .abas { grid-template-columns: 1fr; gap: 24px; }
+    .abas__fotos { order: -1; aspect-ratio: 4/3; }
+    .gastronomia__midia { order: 2; }
+  }
+  @media (max-width: 640px) {
+    .tempo { grid-template-columns: 1fr; gap: 16px; padding: 0; }
+    .tempo::before { left: calc(50% - .5px); right: auto; top: 0; bottom: 0; width: 1px; height: auto; }
+    .tempo::after  { left: calc(50% - 1.5px); right: auto; top: 0; bottom: 0; width: 3px; height: auto; transform: scaleY(0); transform-origin: top; }
+    .tempo.ativo::after { transform: none; }
+    .tempo__item { width: 50%; padding: 0 22px 0 0; text-align: right; }
+    .tempo__item:nth-child(even) { margin-left: 50%; padding: 0 0 0 22px; text-align: left; }
+    .tempo__ponto { top: 16px; left: auto; right: -6.5px; }
+    .tempo__item:nth-child(even) .tempo__ponto { right: auto; left: -6.5px; }
+    .tempo__num    { font-size: 2.6rem; }
+    .tempo__rotulo { font-size: .74rem; letter-spacing: .05em; white-space: nowrap; }
+    .eventos .cabecalho-secao { text-align: center; justify-items: center; }
+    .eventos .texto-intro { margin: 0 auto; }
+    .eventos__lista { grid-template-columns: 1fr 1fr; }
+    .evento { min-height: 0; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; padding: 24px 12px; }
+    .evento:last-child { grid-column: 1 / -1; }
+    .evento__numero { display: none; }
+    .evento__icone  { width: 40px; height: 40px; flex: none; }
+    .evento__nome   { font-size: 1.15rem; }
+    .rodape__logo   { width: 96px; }
+    .parceiros__logos { grid-template-columns: repeat(2,1fr); }
+    .formulario { grid-template-columns: 1fr 1fr; gap: 10px; padding: 18px 14px; }
+    .campo { gap: 4px; min-width: 0; }
+    .campo label { font-size: .66rem; letter-spacing: .04em; }
+    .campo input, .campo select, .campo textarea { min-height: 42px; padding: 9px 11px; }
+    .campo select { padding-right: 30px; background-position: right 11px center; }
+    .campo textarea { min-height: 64px; }
+    .formulario .botao { min-height: 44px; margin-top: 4px; font-size: .78rem; }
+  }
+</style>
+
+<!-- 01 · HERO -->
+<section class="hero" id="topo">
+  <div class="hero__foto foto foto--escura">
+    <img
+      src={p('hero-salao-corporativo.webp')}
+      alt="Salão da Villa Pacaembu com tijolo aparente, tesouras de madeira e mesas montadas para evento"
+      width="1537" height="1023"
+      loading="eager" fetchpriority="high"
+    />
+  </div>
+  <div class="hero__flamula">
+    <img class="hero__logo anima-entrada" src={LOGO} alt="Villa Pacaembu" width="606" height="400" />
+    <h1 class="titulo titulo--grande anima-entrada">
+      Um espaço para <span class="destaque">transformar a experiência corporativa</span>
+    </h1>
+    <p class="hero__texto anima-entrada">
+      Ambientes versáteis e arquitetura <br class="br-mobile" />histórica para encontros que vão <br class="br-mobile" />além da sala de reunião.
+    </p>
+    <a class="botao anima-entrada" href="#contato">Solicite orçamento</a>
+  </div>
+</section>
+
+<!-- 02 · AUTORIDADE -->
+<section class="autoridade" id="autoridade" aria-label="Números da Villa Pacaembu">
+  <div class="container">
+    <ol class="tempo" data-tempo>
+      <li class="tempo__item" style="--i:0">
+        <span class="tempo__ponto" aria-hidden="true"></span>
+        <span class="tempo__mascara"><span class="tempo__num">+11</span></span>
+        <span class="tempo__rotulo">anos de história</span>
+      </li>
+      <li class="tempo__item" style="--i:1">
+        <span class="tempo__ponto" aria-hidden="true"></span>
+        <span class="tempo__mascara"><span class="tempo__num">+1.000</span></span>
+        <span class="tempo__rotulo">eventos realizados</span>
+      </li>
+      <li class="tempo__item" style="--i:2">
+        <span class="tempo__ponto" aria-hidden="true"></span>
+        <span class="tempo__mascara"><span class="tempo__num">até 250</span></span>
+        <span class="tempo__rotulo">convidados</span>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- 03 · EXPERIÊNCIA 360° -->
+<section class="experiencia" id="experiencia">
+  <div class="container experiencia__grade">
+    <div class="experiencia__texto">
+      <span class="legenda revela">Experiência 360°</span>
+      <h2 class="titulo titulo--secao titulo--escuro revela">
+        Tire o evento da <span class="destaque">sala de reunião</span>
+      </h2>
+      <p class="revela atraso-1">
+        <span class="so-desktop">Na Villa Pacaembu, sua empresa encontra um espaço completo para transformar encontros corporativos <br class="br-desktop" />em experiências mais dinâmicas. Arquitetura rústica, <br class="br-desktop" />ambientes versáteis, gastronomia própria e estrutura <br class="br-desktop" />para diferentes formatos de evento, tudo em uma <br class="br-desktop" />localização estratégica na Barra Funda.</span>
+        <span class="so-mobile">Um espaço completo para encontros corporativos mais dinâmicos: arquitetura rústica, ambientes versáteis, gastronomia própria e localização estratégica na Barra Funda.</span>
+      </p>
+    </div>
+    <div class="experiencia__midia">
+      <div class="foto revela-foto">
+        <img src={p('experiencia-salao.webp')} alt="Evento corporativo no salão da Villa Pacaembu, com equipes reunidas entre mesas e pé-direito alto" width="1600" height="1065" loading="lazy" />
+      </div>
+      <span class="experiencia__cota" aria-hidden="true"></span>
+    </div>
+  </div>
+</section>
+
+<!-- 09 · GALERIA -->
+<section class="galeria" id="galeria">
+  <div class="container">
+    <span class="legenda revela">Galeria</span>
+    <h2 class="titulo titulo--escuro revela" style="margin-top:20px">
+      Conheça os ambientes da Villa Pacaembu e <span class="destaque">imagine seu próximo evento</span> em um cenário que foge do convencional.
+    </h2>
+  </div>
+  <div class="carrossel" data-carrossel="galeria" aria-label="Galeria de fotos" tabindex="0">
+    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('galeria-06.webp')} alt="Salão da Villa Pacaembu com mesas montadas e palestrante falando para as equipes" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--v"><div class="foto"><img src={p('galeria-02.webp')} alt="Mesa redonda posta ao lado da parede de tijolo aparente" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('galeria-09.webp')} alt="Equipe no palco em frente ao telão de LED durante evento corporativo" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--v"><div class="foto"><img src={p('galeria-13.webp')} alt="Salão de jantar com mesas postas, arranjos de flores e luz quente" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('galeria-11.webp')} alt="Grande grupo de colaboradores reunidos diante do telão" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--v"><div class="foto"><img src={p('galeria-05.webp')} alt="Lounge com poltronas, mesa de madeira e velas" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('galeria-01.webp')} alt="Colaboradores à mesa durante confraternização corporativa" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--v"><div class="foto"><img src={p('galeria-14.webp')} alt="Mesa redonda com toalha de renda, taças e arranjo de flores" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('galeria-08.webp')} alt="Equipes reunidas diante do telão e da cortina de luzes" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--v"><div class="foto"><img src={p('galeria-03.webp')} alt="Lounge com sofás e poltronas brancas" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('galeria-04.webp')} alt="Mesa de frios e petiscos no salão com equipes ao fundo" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--v"><div class="foto"><img src={p('galeria-12.webp')} alt="Roda de samba ao vivo durante confraternização" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('galeria-15.webp')} alt="Pista de dança com luzes e cortina de LED" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('galeria-07.webp')} alt="Telão de LED com apresentação e convidados ao redor" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('galeria-10.webp')} alt="Vista de cima da pista com equipes, telão e banda" width="1600" height="1065" loading="lazy" /></div></figure>
+  </div>
+  <div class="container">
+    <div class="carrossel-controles">
+      <div class="carrossel-progresso" aria-hidden="true"><span data-progresso="galeria"></span></div>
+      <div class="carrossel-botoes">
+        <button class="carrossel-botao" type="button" data-anterior="galeria" aria-label="Foto anterior">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M11 3L5 9l6 6"/></svg>
+        </button>
+        <button class="carrossel-botao" type="button" data-proximo="galeria" aria-label="Próxima foto">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 3l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 · EVENTOS (FORMATOS) -->
+<section class="eventos" id="eventos">
+  <div class="container">
+    <div class="cabecalho-secao">
+      <div>
+        <span class="legenda revela">Formatos</span>
+        <h2 class="titulo titulo--secao titulo--escuro revela">
+          Para diferentes momentos da <span class="destaque">sua empresa</span>
+        </h2>
+      </div>
+      <p class="texto-intro revela atraso-1">
+        <span class="so-desktop"><span class="linha-inteira">Da integração de equipes aos grandes eventos de marca,</span> <br class="br-desktop" /><span class="linha-inteira">a Villa Pacaembu oferece o cenário e a estrutura para</span> <br class="br-desktop" />diferentes experiências corporativas.</span>
+        <span class="so-mobile">Da integração de equipes aos grandes eventos de marca, o cenário e a estrutura para cada experiência.</span>
+      </p>
+    </div>
+    <ul class="eventos__lista">
+      <li class="evento revela">
+        <span class="evento__numero">01</span>
+        <svg class="evento__icone" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="5" width="32" height="18"/><path d="M24 23v4"/><circle cx="12" cy="33" r="3"/><circle cx="24" cy="33" r="3"/><circle cx="36" cy="33" r="3"/><path d="M6 43c0-3.3 2.7-5 6-5s6 1.7 6 5M18 43c0-3.3 2.7-5 6-5s6 1.7 6 5M30 43c0-3.3 2.7-5 6-5s6 1.7 6 5"/></svg>
+        <h3 class="evento__nome">Convenções e congressos</h3>
+      </li>
+      <li class="evento revela atraso-1">
+        <span class="evento__numero">02</span>
+        <svg class="evento__icone" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="7" width="38" height="24"/><path d="M12 24l7-7 5 5 9-9"/><path d="M29 13h4v4"/><path d="M17 31l-4 10M31 31l4 10M24 31v6"/></svg>
+        <h3 class="evento__nome">Treinamentos e imersões</h3>
+      </li>
+      <li class="evento revela atraso-2">
+        <span class="evento__numero">03</span>
+        <svg class="evento__icone" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="9" r="4"/><path d="M16 23c0-4.4 3.6-8 8-8s8 3.6 8 8"/><path d="M11 26h26"/><path d="M14 26l2.5 17h15L34 26"/><path d="M20 33h8"/><path d="M29 26v-3.5l3.5-3"/><circle cx="33.5" cy="18.5" r="1.4"/></svg>
+        <h3 class="evento__nome">Workshops e palestras</h3>
+      </li>
+      <li class="evento revela atraso-3">
+        <span class="evento__numero">04</span>
+        <svg class="evento__icone" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 4c5.5 4.5 8.5 11 8.5 19v9h-17v-9C15.5 15 18.5 8.5 24 4z"/><circle cx="24" cy="17" r="3.2"/><path d="M15.5 25L10 31v6l5.5-3.5M32.5 25l5.5 6v6l-5.5-3.5"/><path d="M20 32.5c0 4 1.6 7 4 10 2.4-3 4-6 4-10"/></svg>
+        <h3 class="evento__nome">Lançamentos e ativações</h3>
+      </li>
+      <li class="evento revela atraso-4">
+        <span class="evento__numero">05</span>
+        <svg class="evento__icone" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g transform="rotate(8 15 42)"><path d="M10 7h10v8a5 5 0 0 1-10 0z"/><path d="M10 11h10"/><path d="M15 20v21M11 42h8"/></g><g transform="rotate(-8 33 42)"><path d="M28 7h10v8a5 5 0 0 1-10 0z"/><path d="M28 11h10"/><path d="M33 20v21M29 42h8"/></g><path d="M24 1v3M20.5 2.5l1.5 2M27.5 2.5l-1.5 2"/></svg>
+        <h3 class="evento__nome">Confraternizações corporativas</h3>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- 05 · DIFERENCIAIS -->
+<section class="diferenciais" id="diferenciais">
+  <div class="container">
+    <span class="legenda revela">Estrutura</span>
+    <h2 class="titulo titulo--secao titulo--escuro revela" style="margin-top:20px">
+      Estrutura para fazer <span class="destaque">o evento acontecer</span>
+    </h2>
+    <div class="abas revela atraso-1" data-abas>
+      <div class="abas__lista">
+        <div class="aba ativo">
+          <h3><button class="aba__botao" type="button" id="aba-1" aria-controls="aba-texto-1" aria-expanded="true"><span class="aba__numero">01</span><span class="aba__titulo">Camarim e espaço de apoio</span></button></h3>
+          <div class="aba__texto" id="aba-texto-1"><p><span class="so-desktop">Quase 70 m² com bancada e lounge, oferecendo uma estrutura reservada para preparação de palestrantes, convidados e equipe durante o evento.</span><span class="so-mobile">Quase 70 m² com bancada e lounge, reservados para palestrantes, convidados e equipe.</span></p></div>
+          <span class="aba__barra" aria-hidden="true"></span>
+        </div>
+        <div class="aba">
+          <h3><button class="aba__botao" type="button" id="aba-2" aria-controls="aba-texto-2" aria-expanded="false"><span class="aba__numero">02</span><span class="aba__titulo">Tecnologia integrada ao espaço</span></button></h3>
+          <div class="aba__texto" id="aba-texto-2"><p><span class="so-desktop">Projeção mapeada em toda a parede do salão para apresentações e experiências visuais, sem abrir mão <br class="br-desktop" />da personalidade do ambiente.</span><span class="so-mobile">Projeção mapeada em toda a parede do salão para apresentações e experiências visuais.</span></p></div>
+          <span class="aba__barra" aria-hidden="true"></span>
+        </div>
+        <div class="aba">
+          <h3><button class="aba__botao" type="button" id="aba-3" aria-controls="aba-texto-3" aria-expanded="false"><span class="aba__numero">03</span><span class="aba__titulo">Estrutura completa e atendimento dedicado</span></button></h3>
+          <div class="aba__texto" id="aba-texto-3"><p><span class="so-desktop">Mobiliário, decoração, gastronomia e suporte para tornar a organização mais prática e a experiência mais fluida.</span><span class="so-mobile">Mobiliário, decoração, gastronomia e suporte para uma organização mais prática.</span></p></div>
+          <span class="aba__barra" aria-hidden="true"></span>
+        </div>
+      </div>
+      <div class="abas__fotos">
+        <img class="ativo" src={p('diferencial-camarim.webp')}   alt="Camarim da Villa Pacaembu com bancada, espelhos iluminados e cadeiras" width="1600" height="1066" loading="lazy" />
+        <img              src={p('diferencial-projecao.webp')}  alt="Apresentação em telão no salão da Villa Pacaembu durante evento corporativo" width="1538" height="1023" loading="lazy" />
+        <img              src={p('diferencial-estrutura.webp')} alt="Salão da Villa Pacaembu montado com barracas, decoração e mobiliário para confraternização" width="1600" height="1065" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 · GASTRONOMIA -->
+<section class="gastronomia" id="gastronomia">
+  <img class="gastronomia__traco" src={TRACO} alt="" aria-hidden="true" />
+  <div class="container gastronomia__grade">
+    <div class="gastronomia__midia">
+      <div class="foto foto--escura revela-foto slides" data-slides>
+        <img class="ativo" style="object-position:32% 50%" src={p('gastronomia-01.webp')} alt="Mesa de frios, pães e queijos preparada pela gastronomia própria da Villa Pacaembu" width="1600" height="1064" loading="lazy" />
+        <img src={p('gastronomia-06.webp')} alt="Porção de chili com nachos servida com taças de vinho" width="1600" height="1200" loading="lazy" />
+        <img src={p('gastronomia-04.webp')} alt="Mesa de pães, queijos e frios decorada com ramos e luzes" width="1600" height="1064" loading="lazy" />
+        <img src={p('gastronomia-07.webp')} alt="Carne ao molho de frutas vermelhas com risoto" width="1200" height="800" loading="lazy" />
+        <img src={p('gastronomia-02.webp')} alt="Tábua de frios, queijos e frutas com luzes ao fundo" width="1600" height="1064" loading="lazy" />
+        <img style="object-position:35% 50%" src={p('gastronomia-05.webp')} alt="Doces finos embalados sobre mesa de madeira" width="1600" height="1064" loading="lazy" />
+        <img src={p('gastronomia-08.webp')} alt="Filé ao molho com legumes e batatas" width="1600" height="1066" loading="lazy" />
+        <img src={p('gastronomia-03.webp')} alt="Mesa posta com frios, pães, flores e cortina de luzes" width="1600" height="1064" loading="lazy" />
+        <button class="slides__seta slides__seta--anterior" type="button" data-slide-anterior aria-label="Foto anterior"><svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11 3L5 9l6 6"/></svg></button>
+        <button class="slides__seta slides__seta--proxima"  type="button" data-slide-proxima  aria-label="Próxima foto"><svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 3l6 6-6 6"/></svg></button>
+      </div>
+      <div class="slides__pontos">
+        {Array.from({length: 8}, (_, i) => (
+          <button type="button" class={`slides__ponto${i === 0 ? ' ativo' : ''}`} aria-label={`Foto ${i+1} de 8`}></button>
+        ))}
+      </div>
+    </div>
+    <div class="gastronomia__texto">
+      <span class="legenda legenda--clara revela">Gastronomia própria</span>
+      <h2 class="titulo titulo--secao revela">Sabores que também fazem <span class="destaque">parte do evento</span></h2>
+      <p class="revela atraso-1">
+        <span class="so-desktop">A experiência corporativa também acontece à mesa. <br class="br-desktop" />A Villa Pacaembu conta com gastronomia própria <br class="br-desktop" />e cardápios cuidadosamente elaborados para <br class="br-desktop" />diferentes formatos de evento, com menus que <br class="br-desktop" />acompanham o perfil e os objetivos de cada ocasião.</span>
+        <span class="so-mobile">Gastronomia própria e cardápios elaborados para cada formato de evento, de acordo com o perfil e os objetivos da ocasião.</span>
+      </p>
+      <a class="botao revela atraso-2" href="#contato">Solicite orçamento</a>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · PARCEIROS -->
+<section class="parceiros" id="parceiros">
+  <div class="container">
+    <div class="cabecalho-secao">
+      <div>
+        <span class="legenda revela">Quem já esteve aqui</span>
+        <h2 class="titulo titulo--secao titulo--escuro revela">
+          Marcas que já escolheram a <span class="destaque">Villa Pacaembu</span>
+        </h2>
+      </div>
+      <p class="texto-intro revela atraso-1">
+        <span class="so-desktop">Empresas que encontraram na nossa estrutura um cenário diferente para reunir equipes, apresentar <br class="br-desktop" />ideias e criar experiências.</span>
+        <span class="so-mobile">Empresas que escolheram nossa estrutura para reunir equipes e criar experiências.</span>
+      </p>
+    </div>
+    <ul class="parceiros__logos revela">
+      <li><span class="logo-ph">LOGO 01</span></li>
+      <li><span class="logo-ph">LOGO 02</span></li>
+      <li><span class="logo-ph">LOGO 03</span></li>
+      <li><span class="logo-ph">LOGO 04</span></li>
+      <li><span class="logo-ph">LOGO 05</span></li>
+      <li><span class="logo-ph">LOGO 06</span></li>
+      <li><span class="logo-ph">LOGO 07</span></li>
+      <li><span class="logo-ph">LOGO 08</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 08 · DEPOIMENTOS -->
+<section class="depoimentos" id="depoimentos">
+  <div class="container">
+    <div class="depoimentos__cabecalho">
+      <span class="legenda legenda--clara revela">Avaliações no Google</span>
+      <h2 class="titulo titulo--secao revela" style="margin:20px auto clamp(40px,5vw,64px)">
+        Experiências reais de empresas que já <span class="destaque">escolheram nossa casa</span>
+      </h2>
+    </div>
+    <div class="carrossel" data-carrossel="depoimentos" aria-label="Depoimentos" tabindex="0">
+      <figure class="depoimento">
+        <span class="depoimento__estrelas" aria-label="5 de 5 estrelas">★★★★★</span>
+        <blockquote>A gastronomia que já era incrível, agora está mil vezes melhor. […] Há uma novidade no espaço que os convidados amam, que é a projeção mapeada, que faz muita diferença.</blockquote>
+        <figcaption>Laura Arcos Mendes Assessoria</figcaption>
+      </figure>
+      <figure class="depoimento">
+        <span class="depoimento__estrelas" aria-label="5 de 5 estrelas">★★★★★</span>
+        <blockquote>Fomos super bem atendidos desde o começo. […] A decoração ficou maravilhosa, a comida estava muito gostosa e todos os convidados elogiaram a organização e o local.</blockquote>
+        <figcaption>Pimentel</figcaption>
+      </figure>
+      <figure class="depoimento">
+        <span class="depoimento__estrelas" aria-label="5 de 5 estrelas">★★★★★</span>
+        <blockquote>Lugar aprazível e espaçoso. Fui muito bem atendida, do momento da contratação do espaço até a finalização da festa. Tudo gostoso (o chef é nota 1000), bem decorado e organizado.</blockquote>
+        <figcaption>Lívia Prado</figcaption>
+      </figure>
+      <figure class="depoimento">
+        <span class="depoimento__estrelas" aria-label="5 de 5 estrelas">★★★★★</span>
+        <blockquote>Lá é incrível! Local bem estruturado. Coordenação acolhedora. Buffet incrível, a comida é maravilhosa. […] Ambiente aconchegante!</blockquote>
+        <figcaption>Luana Faustino</figcaption>
+      </figure>
+    </div>
+    <div class="carrossel-controles">
+      <div class="carrossel-progresso" aria-hidden="true"><span data-progresso="depoimentos"></span></div>
+      <div class="carrossel-botoes">
+        <button class="carrossel-botao" type="button" data-anterior="depoimentos" aria-label="Depoimento anterior">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M11 3L5 9l6 6"/></svg>
+        </button>
+        <button class="carrossel-botao" type="button" data-proximo="depoimentos" aria-label="Próximo depoimento">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 3l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · CONTATO -->
+<section class="contato" id="contato">
+  <div class="container contato__grade">
+    <div class="contato__intro">
+      <span class="legenda legenda--clara revela">Orçamento</span>
+      <h2 class="titulo titulo--secao revela">
+        Tire seu próximo evento corporativo <span class="destaque">do convencional</span>
+      </h2>
+      <p class="revela atraso-1">Preencha o formulário e, em breve, <br class="br-mobile" />nosso time entrará em contato com você.</p>
+      <p class="endereco revela atraso-2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+        <a class="endereco__link" href="https://www.google.com/maps/search/?api=1&query=R.+James+Holland,+228+-+Barra+Funda,+S%C3%A3o+Paulo+-+SP,+01138-000" target="_blank" rel="noopener" title="Abrir no Google Maps">
+          R. James Holland, 228 - Barra Funda,<br />São Paulo - SP, 01138-000
+        </a>
+      </p>
+    </div>
+
+    <form
+      class="formulario revela atraso-1"
+      data-form-id={formId}
+      data-submit-url={submitUrl}
+      data-grid-id="form-campos"
+      data-success-id="form-sucesso"
+    >
+      <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none;" />
+      <div id="form-campos" style="display:contents">
+        {campos.map((campo) => (
+          <div class={`campo${campo.full ? ' campo--inteiro' : ''}`}>
+            <label for={`form-field-${campo.name}`}>
+              {campo.label}
+              {campo.hint && <span class="opcional"> ({campo.hint})</span>}
+            </label>
+            {campo.type === 'select' ? (
+              <select
+                id={`form-field-${campo.name}`}
+                name={campo.name}
+                required={campo.required}
+              >
+                {campo.options?.map((opt) => (
+                  <option
+                    value={opt.value}
+                    disabled={opt.disabled}
+                    selected={opt.selected}
+                  >{opt.label}</option>
+                ))}
+              </select>
+            ) : campo.type === 'textarea' ? (
+              <textarea
+                id={`form-field-${campo.name}`}
+                name={campo.name}
+                required={campo.required}
+                rows={3}
+                placeholder={campo.placeholder}
+              />
+            ) : (
+              <input
+                id={`form-field-${campo.name}`}
+                name={campo.name}
+                type={campo.type}
+                required={campo.required}
+                placeholder={campo.placeholder}
+                autocomplete={
+                  campo.name === 'nome'     ? 'name'         :
+                  campo.name === 'email'    ? 'email'        :
+                  campo.name === 'empresa'  ? 'organization' :
+                  campo.name === 'telefone' ? 'tel'          : undefined
+                }
+                data-datepicker={campo.datepicker ? '' : undefined}
+              />
+            )}
+          </div>
+        ))}
+        <button class="botao botao--escuro" type="submit">Solicitar orçamento</button>
+      </div>
+      <div id="form-sucesso">
+        <p>Obrigado! Em breve nossa equipe entrará em contato.</p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- RODAPÉ -->
+<footer class="rodape">
+  <div class="container rodape__conteudo">
+    <img class="rodape__logo" src={LOGO} alt="Villa Pacaembu" width="606" height="400" loading="lazy" />
+    <p class="rodape__direitos">© <span data-ano>2026</span> Villa Pacaembu. Todos os direitos reservados.</p>
+    <p class="rodape__credito">
+      Desenvolvido por
+      <a class="rodape__dmove" href="https://dmove.com.br" target="_blank" rel="noopener">
+        <img src={p('logo-dmove.webp')} alt="Dmove" width="600" height="134" loading="lazy" />
+      </a>
+    </p>
+  </div>
+</footer>
+
+<script>
+  import { init } from '../scripts/eventos-corporativos';
+  import { initForms } from '../scripts/forms';
+  import 'flatpickr/dist/flatpickr.min.css';
+  init();
+  initForms();
+</script>
+
+</Base>
+

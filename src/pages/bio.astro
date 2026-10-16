@@ -1,0 +1,385 @@
+---
+import 'flatpickr/dist/flatpickr.min.css';
+import Base from '../layouts/Base.astro';
+import { getPreset } from '../scripts/form-presets';
+import config from '../../config.json';
+
+const cdn     = config.media.cdn_base;
+const photos  = cdn + '/photos';
+const fields  = getPreset(config.forms['lead-form'].preset);
+const webhook = config.forms['lead-form'].webhooks[0];
+
+const links = [
+  {
+    href:     'https://villapacaembu.com.br/',
+    label:    'Site Oficial',
+    sublabel: 'villapacaembu.com.br',
+    external: true,
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>`,
+  },
+  {
+    href:     'https://www.instagram.com/villapacaembu/',
+    label:    'Instagram',
+    sublabel: '@villapacaembu',
+    external: true,
+    icon: `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>`,
+  },
+  {
+    href:     'https://www.google.com/maps/search/?api=1&query=R.+James+Holland%2C+228+-+Barra+Funda%2C+S%C3%A3o+Paulo+-+SP%2C+01138-000',
+    label:    'Como Chegar',
+    sublabel: 'R. James Holland, 228 — Barra Funda',
+    external: true,
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21.5s-7-6.2-7-11.5a7 7 0 0 1 14 0c0 5.3-7 11.5-7 11.5z"/><circle cx="12" cy="10" r="2.5"/></svg>`,
+  },
+];
+
+const autoMap: Record<string, string> = {
+  nome: 'name', email: 'email', telefone: 'tel', empresa: 'organization',
+};
+---
+
+<Base
+  title="Villa Pacaembu | Bio"
+  description="Uma casa com personalidade para celebrar grandes momentos. Solicite orçamento."
+  ogImage={`${photos}/villa-pacaembu.webp`}
+  canonical={`https://${config.domain}/bio`}
+  hideWhatsApp={false}
+>
+
+<main class="bio">
+  <div class="bio-fundo" aria-hidden="true">
+    <img src={`${photos}/villa-pacaembu.webp`} alt="" width="1200" height="800" fetchpriority="high" />
+  </div>
+
+  <div class="bio-conteudo">
+
+    <header class="bio-cabecalho">
+      <img
+        src={`${photos}/logo-villa-pacaembu.svg`}
+        alt="Villa Pacaembu"
+        class="bio-logo"
+        width="606" height="400"
+      />
+      <p class="bio-tagline">Uma casa com personalidade para celebrar grandes momentos</p>
+    </header>
+
+    <nav class="bio-links" aria-label="Links do Villa Pacaembu">
+      {links.map((l) => (
+        <a
+          class="bio-link"
+          href={l.href}
+          {...(l.external ? { target: '_blank', rel: 'noopener' } : {})}
+        >
+          <span class="bio-link-icone" set:html={l.icon} />
+          <span class="bio-link-texto">
+            <span class="bio-link-label">{l.label}</span>
+            <span class="bio-link-sub">{l.sublabel}</span>
+          </span>
+        </a>
+      ))}
+    </nav>
+
+    <div class="bio-form-wrap">
+      <p class="bio-form-titulo">Solicite orçamento</p>
+      <form
+        class="bio-form"
+        data-form-id="lead-form-bio"
+        data-submit-url={webhook}
+        data-grid-id="bio-form-campos"
+        data-success-id="bio-form-success"
+      >
+        <input name="website" type="text" style="display:none" tabindex="-1" autocomplete="off" />
+        <div class="bio-campos" id="bio-form-campos">
+          {fields.map((f) => (
+            <div
+              class:list={['bio-campo', (f.full || f.name === 'nome' || f.name === 'tipo_evento') ? 'bio-campo-full' : '']}
+            >
+              <label for={`form-field-bio-${f.name}`}>
+                {f.label}{f.hint && <> <span class="bio-campo-hint">({f.hint})</span></>}
+              </label>
+              {f.type === 'select' ? (
+                <div class="bio-select-wrap">
+                  <select
+                    id={`form-field-bio-${f.name}`}
+                    name={f.name}
+                    required={f.required || undefined}
+                  >
+                    {f.options?.map((opt) => (
+                      <option value={opt.value} disabled={opt.disabled || undefined} selected={opt.selected || undefined}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                  <svg class="bio-select-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+              ) : f.type === 'textarea' ? (
+                <textarea
+                  id={`form-field-bio-${f.name}`}
+                  name={f.name}
+                  placeholder={f.placeholder}
+                  rows={f.rows || 3}
+                />
+              ) : (
+                <input
+                  id={`form-field-bio-${f.name}`}
+                  name={f.name}
+                  type={f.type}
+                  placeholder={f.placeholder}
+                  required={f.required || undefined}
+                  data-datepicker={f.datepicker ? '' : undefined}
+                  autocomplete={autoMap[f.name] || (f.datepicker ? 'off' : undefined)}
+                  inputmode={f.type === 'tel' ? 'tel' : f.type === 'number' ? 'numeric' : undefined}
+                />
+              )}
+            </div>
+          ))}
+          <div class="bio-campo bio-campo-full bio-acao">
+            <button class="bio-btn" type="button">Solicitar Orçamento</button>
+          </div>
+        </div>
+      </form>
+      <div id="bio-form-success" class="bio-success">
+        <div class="bio-success-icon">✓</div>
+        <p class="bio-success-titulo">Orçamento enviado!</p>
+        <p class="bio-success-sub">Nossa equipe entrará em contato em breve.</p>
+      </div>
+      <p class="bio-aviso">Suas informações são usadas somente para retorno de orçamento.</p>
+    </div>
+
+    <footer class="bio-rodape">
+      <span>© <span data-ano>2026</span> Villa Pacaembu</span>
+      <span>Desenvolvido por Dmove</span>
+    </footer>
+
+  </div>
+</main>
+
+</Base>
+
+<style is:global>
+/* ── Tokens ──────────────────────────────────────────────── */
+:root {
+  --bio-terracota:  #7a3c24;
+  --bio-terracota-e:#4a2f22;
+  --bio-pessego:    #eaa384;
+  --bio-creme:      #f4ede3;
+  --bio-ferro:      #24201c;
+  --raio:           6px;
+}
+
+/* ── Reset / base ────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; padding: 0;
+  background: var(--bio-ferro);
+  color: var(--bio-creme);
+  font-family: var(--fonte-texto, "Inter", system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100svh;
+}
+img { max-width: 100%; height: auto; display: block; }
+a   { color: inherit; text-decoration: none; }
+
+/* ── Layout ──────────────────────────────────────────────── */
+.bio {
+  position: relative; isolation: isolate;
+  min-height: 100svh;
+  display: flex; flex-direction: column; align-items: center;
+  padding: clamp(48px, 7vw, 72px) clamp(20px, 5vw, 40px) clamp(40px, 5vw, 56px);
+}
+
+/* ── Fundo fixo ──────────────────────────────────────────── */
+.bio-fundo { position: fixed; inset: 0; z-index: -2; overflow: hidden; }
+.bio-fundo img {
+  width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%;
+  filter: brightness(.45) saturate(.7);
+}
+.bio::before {
+  content: ""; position: fixed; inset: 0; z-index: -1;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(122,60,36,.3) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(36,32,28,.5) 0%, rgba(36,32,28,.1) 40%, rgba(36,32,28,.7) 100%);
+}
+
+/* ── Conteúdo ────────────────────────────────────────────── */
+.bio-conteudo {
+  width: 100%; max-width: 440px;
+  display: flex; flex-direction: column; align-items: center; gap: clamp(24px, 3.5vw, 36px);
+}
+
+/* ── Cabeçalho ───────────────────────────────────────────── */
+.bio-cabecalho { text-align: center; }
+.bio-logo {
+  width: 140px; height: auto;
+  margin: 0 auto 18px;
+  filter: brightness(0) invert(1);
+}
+.bio-tagline {
+  margin: 0;
+  font-size: clamp(14px, 1.3vw, 16px);
+  line-height: 1.5;
+  color: rgba(244,237,227,.72);
+  max-width: 30ch;
+}
+
+/* ── Links ───────────────────────────────────────────────── */
+.bio-links { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+.bio-link {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px;
+  border-radius: var(--raio);
+  border: 1.5px solid rgba(244,237,227,.18);
+  background: rgba(36,32,28,.38);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  transition: background .2s, border-color .2s, transform .15s;
+}
+.bio-link:hover  { background: rgba(36,32,28,.58); border-color: rgba(244,237,227,.36); transform: translateY(-2px); }
+.bio-link:active { transform: translateY(0); }
+
+.bio-link-icone { flex: none; width: 20px; height: 20px; opacity: .85; display: flex; align-items: center; justify-content: center; }
+.bio-link-icone svg { width: 20px; height: 20px; display: block; }
+.bio-link-texto { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.bio-link-label { font-weight: 600; font-size: 14px; line-height: 1.2; }
+.bio-link-sub   { font-size: 11px; opacity: .55; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── Formulário ──────────────────────────────────────────── */
+.bio-form-wrap {
+  width: 100%;
+  border-radius: 10px;
+  border: 1.5px solid rgba(244,237,227,.16);
+  background: rgba(36,32,28,.42);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  padding: clamp(20px, 3vw, 28px);
+}
+.bio-form-titulo {
+  font-family: var(--fonte-titulo, "Noto Sans Display", sans-serif);
+  font-stretch: 62.5%;
+  font-weight: 600;
+  font-size: clamp(22px, 2.2vw, 28px);
+  line-height: 1; letter-spacing: .01em; text-transform: uppercase;
+  color: var(--bio-creme);
+  margin: 0 0 18px;
+}
+
+.bio-campos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 12px;
+  align-items: end;
+}
+.bio-campo { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.bio-campo-full { grid-column: 1 / -1; }
+.bio-campo label { font-size: 12px; font-weight: 600; line-height: 1; color: rgba(244,237,227,.7); text-transform: uppercase; letter-spacing: .05em; }
+.bio-campo-hint  { font-weight: 400; opacity: .6; text-transform: none; letter-spacing: 0; }
+
+.bio-campo input,
+.bio-campo select,
+.bio-campo textarea {
+  width: 100%; min-width: 0;
+  font-family: var(--fonte-texto, "Inter", sans-serif);
+  font-size: 15px; font-weight: 500;
+  color: var(--bio-creme);
+  background: rgba(255,255,255,.07);
+  border: 1.5px solid rgba(244,237,227,.2);
+  border-radius: var(--raio);
+  padding: 11px 12px;
+  transition: border-color .2s, box-shadow .2s;
+  -webkit-appearance: none; appearance: none;
+}
+.bio-campo input::placeholder,
+.bio-campo textarea::placeholder { color: rgba(244,237,227,.3); }
+.bio-campo input:focus,
+.bio-campo select:focus,
+.bio-campo textarea:focus {
+  outline: none;
+  border-color: var(--bio-pessego);
+  box-shadow: 0 0 0 3px rgba(234,163,132,.2);
+}
+.bio-campo select option { background: #2b1810; color: var(--bio-creme); }
+.bio-campo textarea { resize: vertical; min-height: 72px; }
+
+.bio-select-wrap { position: relative; }
+.bio-select-seta {
+  position: absolute; right: 9px; top: 50%; transform: translateY(-50%);
+  width: 16px; height: 16px; pointer-events: none;
+  color: rgba(244,237,227,.45);
+}
+
+.bio-acao { margin-top: 4px; }
+.bio-btn {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  padding: 13px 20px;
+  border: 0; border-radius: var(--raio);
+  font-family: var(--fonte-apoio, "Instrument Sans", sans-serif);
+  font-weight: 600; font-size: 14px; letter-spacing: .06em; text-transform: uppercase;
+  background: var(--bio-terracota); color: var(--bio-creme);
+  cursor: pointer;
+  transition: background .2s;
+}
+.bio-btn:hover { background: var(--bio-terracota-e); }
+
+/* Sucesso */
+.bio-success { display: none; text-align: center; padding: 16px 0 8px; }
+.bio-success.active { display: block; }
+.bio-success-icon {
+  width: 46px; height: 46px; border-radius: 50%;
+  background: var(--bio-terracota); color: var(--bio-creme);
+  display: grid; place-items: center; margin: 0 auto 12px; font-size: 20px;
+}
+.bio-success-titulo {
+  font-family: var(--fonte-titulo, "Noto Sans Display", sans-serif);
+  font-stretch: 62.5%; font-weight: 600;
+  font-size: 22px; text-transform: uppercase; letter-spacing: .02em;
+  margin: 0 0 6px;
+}
+.bio-success-sub { font-size: 14px; opacity: .65; margin: 0; }
+
+.bio-aviso {
+  margin: 12px 0 0; font-size: 11px; line-height: 1.4;
+  color: rgba(244,237,227,.35); text-align: center;
+}
+
+/* Erros de validação */
+.field-error { color: #fca5a5; font-size: 0.75rem; margin-top: 3px; display: none; }
+.field-error.visible { display: block; }
+
+/* ── Rodapé ──────────────────────────────────────────────── */
+.bio-rodape {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  font-size: 11px; opacity: .28; text-align: center;
+}
+
+/* ── Flatpickr tema escuro (terracota) ───────────────────── */
+.flatpickr-calendar {
+  font-family: var(--fonte-texto, "Inter", sans-serif) !important;
+  background: #2b1810 !important;
+  border-color: rgba(244,237,227,.18) !important;
+  border-radius: var(--raio) !important;
+  color: var(--bio-creme) !important;
+  box-shadow: 0 12px 32px -8px rgba(0,0,0,.6) !important;
+}
+.flatpickr-day { color: var(--bio-creme) !important; }
+.flatpickr-day:hover { background: rgba(122,60,36,.3) !important; }
+.flatpickr-day.selected, .flatpickr-day.selected:hover { background: var(--bio-terracota) !important; border-color: var(--bio-terracota) !important; }
+.flatpickr-months, .flatpickr-weekdays { background: rgba(36,32,28,.4) !important; color: var(--bio-creme) !important; }
+.flatpickr-weekday { color: rgba(244,237,227,.5) !important; }
+.flatpickr-prev-month svg, .flatpickr-next-month svg { fill: var(--bio-creme) !important; }
+
+/* ── Responsivo ──────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .bio-campos { grid-template-columns: 1fr; }
+  .bio-campo-full { grid-column: 1; }
+}
+</style>
+
+<script>
+  import { init } from '../scripts/eventos-corporativos';
+  import { initForms } from '../scripts/forms';
+  init();
+  initForms();
+
+  const anoEl = document.querySelector<HTMLElement>('[data-ano]');
+  if (anoEl) anoEl.textContent = String(new Date().getFullYear());
+</script>

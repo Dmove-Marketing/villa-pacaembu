@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 
 // Ajuste `site` para o domínio do projeto (usado em canonical/OG).
 export default defineConfig({
-  site: 'https://eventos.cliente.com.br',
+  site: 'https://eventos.villapacaembu.com.br',
   output: 'static',
   prefetch: true,
   build: {

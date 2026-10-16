@@ -1,18 +1,160 @@
 ---
-// Página placeholder do template. Substitua pelo conteúdo do projeto.
-// Fluxo completo: veja CLAUDE.md.
 import Base from '../layouts/Base.astro';
+import config from '../../config.json';
+
+const cdn    = config.media.cdn_base;
+const photos = cdn + '/photos';
+
+const paginas = [
+  {
+    slug:  '/eventos-corporativos',
+    label: 'Eventos Corporativos',
+    desc:  'Landing page de captação com hero, galeria, formulário e todos os diferenciais.',
+    img:   `${photos}/hero-salao-corporativo.webp`,
+    alt:   'Salão da Villa Pacaembu com mesas montadas para evento corporativo',
+  },
+  {
+    slug:  '/bio',
+    label: 'Bio Instagram',
+    desc:  'Link-in-bio com acesso rápido ao site, Instagram, localização e orçamento.',
+    img:   `${photos}/villa-pacaembu.webp`,
+    alt:   'Villa Pacaembu vista externa',
+  },
+];
 ---
 
-<Base title="Dmove — Template de Landing Page" noIndex={true}>
-  <main style="min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px;font-family:system-ui,sans-serif;">
-    <div style="max-width:640px;">
-      <h1 style="font-size:2rem;margin-bottom:16px;">dmove-astro-template</h1>
-      <p style="opacity:.75;line-height:1.6;">
-        Clone deste modelo pronto. Para iniciar um projeto, siga o
-        <strong>CLAUDE.md</strong>: responda o onboarding, informe onde está o HTML
-        recebido do time (Claude Design) e a pasta de destino, e a implementação segue as Fases 1–7.
-      </p>
+<Base
+  title="Villa Pacaembu — Páginas do projeto"
+  description="Índice de páginas do projeto Villa Pacaembu — Dmove."
+  noIndex={true}
+  hideWhatsApp={true}
+>
+  <main class="home">
+    <header class="home-topo">
+      <img
+        src={`${photos}/logo-villa-pacaembu.svg`}
+        alt="Villa Pacaembu"
+        class="home-logo"
+        width="606" height="400"
+      />
+      <p class="home-sub">Páginas do projeto</p>
+    </header>
+
+    <div class="home-grid">
+      {paginas.map((p) => (
+        <a class="tri-card" href={p.slug}>
+          <img src={p.img} alt={p.alt} loading="lazy" decoding="async" />
+          <div class="tri-card-corpo">
+            <h2>{p.label}</h2>
+            <p>{p.desc}</p>
+            <span class="tri-cta">Ver página →</span>
+          </div>
+        </a>
+      ))}
     </div>
+
+    <footer class="home-rodape">
+      <span>© <span data-ano>2026</span> Villa Pacaembu. Todos os direitos reservados.</span>
+      <span>Desenvolvido por Dmove</span>
+    </footer>
   </main>
 </Base>
+
+<style is:global>
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; padding: 0;
+  background: var(--cor-ferro, #24201c);
+  color: var(--cor-creme, #f4ede3);
+  font-family: var(--fonte-texto, "Inter", system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100svh;
+}
+img { max-width: 100%; height: auto; display: block; }
+a   { color: inherit; text-decoration: none; }
+
+.home {
+  display: flex; flex-direction: column; min-height: 100svh;
+  padding: clamp(40px, 6vw, 80px) clamp(20px, 4vw, 48px);
+  max-width: 1240px; margin: 0 auto;
+}
+
+.home-topo { text-align: center; margin-bottom: clamp(40px, 5vw, 64px); }
+.home-logo {
+  width: 110px; height: auto; margin: 0 auto 16px;
+  filter: brightness(0) invert(1);
+}
+.home-sub {
+  margin: 0;
+  font-family: var(--fonte-apoio, "Instrument Sans", sans-serif);
+  font-size: clamp(11px, 1vw, 13px);
+  letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(244,237,227,.4);
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(16px, 2vw, 28px);
+  flex: 1;
+}
+
+.tri-card {
+  position: relative; isolation: isolate;
+  border-radius: 8px; overflow: hidden;
+  aspect-ratio: 3 / 4;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  transition: transform .3s ease;
+}
+.tri-card:hover { transform: translateY(-4px); }
+.tri-card img {
+  position: absolute; inset: 0; z-index: -2;
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .6s cubic-bezier(.2,.7,.2,1);
+}
+.tri-card:hover img { transform: scale(1.05); }
+.tri-card::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(36,32,28,.1) 0%, rgba(36,32,28,.7) 65%, rgba(36,32,28,.9) 100%);
+}
+
+.tri-card-corpo { padding: clamp(20px, 2.5vw, 32px); }
+.tri-card-corpo h2 {
+  font-family: var(--fonte-titulo, "Noto Sans Display", sans-serif);
+  font-stretch: 62.5%; font-weight: 600;
+  font-size: clamp(24px, 2.4vw, 32px);
+  line-height: 1; text-transform: uppercase; letter-spacing: .01em;
+  margin: 0 0 10px;
+}
+.tri-card-corpo p { margin: 0 0 20px; font-size: 14px; line-height: 1.5; opacity: .72; }
+
+.tri-cta {
+  display: inline-block;
+  font-family: var(--fonte-apoio, "Instrument Sans", sans-serif);
+  font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+  padding: 10px 18px; border-radius: 4px;
+  background: var(--cor-terracota, #7a3c24); color: var(--cor-creme, #f4ede3);
+  transition: background .2s;
+}
+.tri-card:hover .tri-cta { background: var(--cor-terracota-escura, #4a2f22); }
+
+.home-rodape {
+  margin-top: clamp(40px, 5vw, 64px);
+  padding-top: 22px;
+  border-top: 1px solid rgba(244,237,227,.1);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  font-size: 13px; opacity: .35;
+}
+
+@media (max-width: 600px) {
+  .home-grid { grid-template-columns: 1fr; }
+  .tri-card  { aspect-ratio: 4 / 3; }
+  .home-rodape { flex-direction: column; align-items: center; text-align: center; }
+}
+</style>
+
+<script>
+  const anoEl = document.querySelector<HTMLElement>('[data-ano]');
+  if (anoEl) anoEl.textContent = String(new Date().getFullYear());
+</script>
