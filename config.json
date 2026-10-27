@@ -5,8 +5,8 @@
   "client": "Villa Pacaembu",
   "environment": "production",
   "tracking": {
-    "gtm_id": "GTM-XXXXXXX",
-    "enabled": false
+    "gtm_id": "GTM-M6XP2FC5",
+    "enabled": true
   },
   "whatsapp": {
     "phone": "5511993560971",
