@@ -1,0 +1,626 @@
+---
+import Base from '../layouts/Base.astro';
+import { getPreset } from '../scripts/form-presets';
+import config from '../../config.json';
+
+const CDN   = config.media.cdn_base;
+const LOGO  = `${CDN}/photos/logo-villa-pacaembu.svg`;
+const TRACO = `${CDN}/photos/traco-empena.svg`;
+const p     = (n: string) => `${CDN}/photos/${n}`;
+
+const submitUrl = config.forms['lead-form'].webhooks[0];
+const campos    = getPreset('social');
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'EventVenue',
+  name: 'Villa Pacaembu',
+  description: 'Casa histórica para casamentos na Barra Funda, São Paulo.',
+  url: `https://${config.domain}/casamentos`,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'R. James Holland, 228',
+    addressLocality: 'São Paulo',
+    addressRegion: 'SP',
+    postalCode: '01138-000',
+    addressCountry: 'BR',
+  },
+};
+---
+
+<Base
+  title="Casamentos na Barra Funda | Villa Pacaembu"
+  description="Arquitetura rústica e ambientes integrados para celebrar a cerimônia e a festa em um só lugar. Casa histórica para casamentos na Barra Funda, São Paulo."
+  ogImage={p('PHOTO-2025-05-19-11-04-48-scaled.webp')}
+  canonical={`https://${config.domain}/casamentos`}
+  jsonLd={jsonLd}
+>
+
+<style>
+  /* ── Hero ─────────────────────────────────────────────── */
+  .hero {
+    position: relative; min-height: 100svh;
+    display: flex; align-items: flex-start;
+    padding-bottom: clamp(48px, 8vh, 96px);
+    background: var(--cor-ferro); color: var(--cor-texto-claro);
+    overflow: hidden;
+  }
+  .hero__foto { position: absolute; inset: 0; height: 100%; }
+  .hero__foto::before {
+    content: ""; position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(180deg, rgba(36,32,28,.15) 0%, rgba(36,32,28,.05) 50%, rgba(36,32,28,.55) 100%);
+  }
+  .hero__flamula {
+    position: relative; z-index: 3;
+    width: min(46%, 600px); margin-left: auto; margin-right: 6vw;
+    padding: clamp(32px,4.5vh,52px) clamp(32px,4vw,60px) clamp(96px,14vh,150px);
+    animation: flamula-desce 1.3s var(--transicao) .15s both;
+  }
+  .hero__flamula::before, .hero__flamula::after {
+    content: ""; position: absolute; left: 0; right: 0; top: 0;
+    clip-path: polygon(0 0, 100% 0, 100% 74%, 0 100%);
+  }
+  .hero__flamula::before {
+    bottom: -4px; background: var(--cor-pessego);
+    clip-path: polygon(0 calc(100% - 4px), 100% calc(74% - 3px), 100% 74%, 0 100%);
+  }
+  .hero__flamula::after {
+    bottom: 0; background: rgba(122,60,36,.86);
+    -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
+  }
+  .hero__flamula > * { position: relative; z-index: 1; }
+  @keyframes flamula-desce { from { transform: translateY(-105%); } to { transform: none; } }
+
+  .hero__logo { width: clamp(120px,11vw,152px); margin: 0 auto clamp(28px,5vh,48px); }
+  .hero h1 { margin-bottom: 24px; }
+  .hero__texto {
+    max-width: 30em; font-size: clamp(1rem,1.25vw,1.12rem); line-height: 1.35;
+    color: rgba(244,237,227,.88); margin-bottom: 32px;
+    padding-left: 14px; border-left: 1px solid var(--cor-pessego);
+  }
+  .hero .botao { min-height: 40px; padding: 10px 18px; font-size: .76rem; }
+  .hero .anima-entrada { animation: sobe .9s var(--transicao) both; }
+  .hero .anima-entrada:nth-child(2) { animation-delay: .9s; }
+  .hero .anima-entrada:nth-child(3) { animation-delay: 1.05s; }
+  .hero .anima-entrada:nth-child(4) { animation-delay: 1.2s; }
+  @keyframes sobe { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+
+  /* ── Autoridade ────────────────────────────────────────── */
+  .autoridade { background: var(--cor-ferro); color: var(--cor-texto-claro); padding: clamp(36px,5vw,64px) 0; }
+  .tempo { position: relative; list-style: none; margin: 0; padding: 28px 0 0; display: grid; grid-template-columns: repeat(3,1fr); }
+  .tempo::before { content: ""; position: absolute; left: 0; right: 0; top: 6px; height: 1px; background: var(--cor-linha-clara); }
+  .tempo::after  { content: ""; position: absolute; left: 0; right: 0; top: 5px; height: 3px; background: var(--cor-pessego); transform: scaleX(0); transform-origin: left; transition: transform 2.4s var(--transicao); }
+  .tempo.ativo::after { transform: scaleX(1); }
+  .tempo__item { position: relative; padding-right: 24px; }
+  .tempo__ponto { position: absolute; top: -28px; left: 0; width: 13px; height: 13px; border-radius: 50%; background: var(--cor-ferro); border: 1px solid var(--cor-linha-clara); transition: background .3s, border-color .3s; transition-delay: calc(var(--i) * .8s); }
+  .tempo.ativo .tempo__ponto { background: var(--cor-pessego); border-color: var(--cor-pessego); }
+  .tempo__mascara { display: block; overflow: hidden; }
+  .tempo__num { display: block; font-family: var(--fonte-titulo); font-stretch: 62.5%; font-weight: 600; font-size: clamp(2.8rem,5.6vw,4.8rem); line-height: 1.02; color: var(--cor-pessego); transform: translateY(105%); transition: transform .9s var(--transicao) calc(var(--i) * .8s); }
+  .tempo.ativo .tempo__num { transform: none; }
+  .tempo__rotulo { display: block; margin-top: 6px; font: 500 .85rem/1.3 var(--fonte-apoio); letter-spacing: .08em; text-transform: uppercase; color: var(--cor-traco); opacity: 0; transition: opacity .6s calc(var(--i) * .8s + .3s); }
+  .tempo.ativo .tempo__rotulo { opacity: 1; }
+  .sem-js .tempo::after { transform: none; }
+  .sem-js .tempo__num  { transform: none; }
+  .sem-js .tempo__rotulo { opacity: 1; }
+  .sem-js .tempo__ponto  { background: var(--cor-pessego); border-color: var(--cor-pessego); }
+
+  /* ── Experiência ───────────────────────────────────────── */
+  .experiencia { padding: var(--secao) 0; }
+  .experiencia__grade { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(40px,7vw,112px); align-items: center; }
+  .experiencia__texto .legenda { margin-bottom: 24px; }
+  .experiencia__texto h2 { margin-bottom: 28px; }
+  .experiencia__texto p  { font-size: clamp(1.02rem,1.3vw,1.15rem); color: var(--cor-texto-suave); max-width: 34em; }
+  .experiencia__midia { position: relative; }
+  .experiencia__midia .foto { aspect-ratio: 4 / 5; }
+  .experiencia__midia .foto > video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .experiencia__cota { position: absolute; right: -28px; top: 0; bottom: 0; width: 12px; border-top: 1px solid var(--cor-oliva); border-bottom: 1px solid var(--cor-oliva); }
+  .experiencia__cota::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--cor-oliva); }
+
+  /* ── Diferenciais ──────────────────────────────────────── */
+  .diferenciais { padding: var(--secao) 0; background: var(--cor-creme-escuro); }
+  .diferenciais h2 { max-width: 12em; margin-bottom: clamp(40px,5vw,64px); }
+  .abas { display: grid; grid-template-columns: 1fr 1.15fr; gap: clamp(32px,5vw,72px); align-items: center; }
+  .abas__lista { border-top: 1px solid var(--cor-linha); }
+  .aba { position: relative; border-bottom: 1px solid var(--cor-linha); }
+  .aba h3 { margin: 0; }
+  .aba__botao { display: flex; align-items: baseline; gap: 18px; width: 100%; padding: 22px 0; text-align: left; background: none; border: 0; cursor: pointer; color: inherit; font: inherit; }
+  .aba__botao:focus-visible { outline: 2px solid var(--cor-terracota); outline-offset: 4px; }
+  .aba__numero { font-family: var(--fonte-titulo); font-stretch: 62.5%; font-weight: 500; font-size: 2rem; line-height: 1; color: rgba(122,60,36,.35); transition: color .3s; }
+  .aba__titulo { font-family: var(--fonte-titulo); font-stretch: 62.5%; font-weight: 600; text-transform: uppercase; font-size: clamp(1.45rem,2vw,1.9rem); line-height: 1; color: rgba(43,36,32,.45); transition: color .3s; }
+  .aba.ativo .aba__numero  { color: var(--cor-pessego); }
+  .aba.ativo .aba__titulo, .aba__botao:hover .aba__titulo { color: var(--cor-texto); }
+  .aba__texto { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s var(--transicao); }
+  .aba__texto > p { overflow: hidden; margin: 0; padding-left: 50px; color: var(--cor-texto-suave); }
+  .aba.ativo .aba__texto  { grid-template-rows: 1fr; }
+  .aba.ativo .aba__texto > p { padding-bottom: 22px; margin-top: -8px; }
+  .aba__barra { position: absolute; left: 0; bottom: -1px; height: 2px; width: 100%; background: var(--cor-terracota); transform: scaleX(0); transform-origin: left; }
+  .abas.rodando .aba.ativo .aba__barra { animation: aba-barra 6s linear forwards; }
+  .abas.pausado .aba.ativo .aba__barra { animation-play-state: paused; }
+  @keyframes aba-barra { to { transform: scaleX(1); } }
+  .abas__fotos { position: relative; aspect-ratio: 5 / 4; overflow: hidden; background: var(--cor-ferro); }
+  .abas__fotos img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.04); transition: opacity .8s var(--transicao), transform 1.4s var(--transicao); }
+  .abas__fotos img.ativo { opacity: 1; transform: none; }
+
+  /* ── Gastronomia ───────────────────────────────────────── */
+  .gastronomia { position: relative; overflow: hidden; background: var(--cor-terracota); color: var(--cor-texto-claro); padding: var(--secao) 0; }
+  .gastronomia__grade { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(40px,7vw,112px); align-items: center; }
+  .gastronomia__midia .foto { aspect-ratio: 4 / 5; }
+  .slides > img { position: absolute; inset: 0; opacity: 0; transition: opacity 1s var(--transicao); }
+  .slides > img.ativo { opacity: 1; }
+  .slides__pontos { display: flex; gap: 8px; margin-top: 16px; }
+  .slides__ponto { width: 28px; height: 3px; padding: 0; border: 0; border-radius: 2px; background: rgba(244,237,227,.3); cursor: pointer; transition: background .3s, width .3s; }
+  .slides__ponto.ativo { background: var(--cor-pessego); width: 44px; }
+  .slides__seta { display: none; }
+  .slides__ponto:focus-visible { outline: 2px solid var(--cor-pessego); outline-offset: 3px; }
+  .gastronomia h2  { margin: 24px 0 28px; }
+  .gastronomia p   { color: rgba(244,237,227,.86); font-size: clamp(1.02rem,1.3vw,1.15rem); max-width: 32em; margin-bottom: 36px; }
+  .gastronomia__traco { position: absolute; left: 68%; top: 50%; transform: translate(-50%,-50%); width: min(78vw,980px); opacity: .08; pointer-events: none; }
+
+  /* ── Depoimentos ───────────────────────────────────────── */
+  .depoimentos { padding: var(--secao) 0; background: var(--cor-ferro); color: var(--cor-texto-claro); overflow: hidden; }
+  .depoimentos__cabecalho { text-align: center; }
+  .depoimentos h2 { max-width: 16em; }
+  .depoimento { width: min(420px,84vw); padding: 32px; display: flex; flex-direction: column; gap: 20px; border: 1px solid var(--cor-linha-clara); }
+  .depoimento__estrelas { color: var(--cor-pessego); letter-spacing: .2em; font-size: 1rem; }
+  .depoimento blockquote { margin: 0; font-size: 1.05rem; color: rgba(244,237,227,.9); }
+  .depoimento figcaption { margin-top: auto; display: flex; flex-direction: column; gap: 2px; font: 500 .9rem/1.3 var(--fonte-apoio); }
+  .depoimento figcaption span { font-weight: 400; color: rgba(244,237,227,.6); font-size: .82rem; }
+
+  /* ── Galeria ───────────────────────────────────────────── */
+  .galeria { padding: var(--secao) 0; background: var(--cor-creme-escuro); }
+  .galeria h2 { max-width: 22em; font-size: clamp(1.9rem,3.4vw,3rem); margin-bottom: clamp(40px,5vw,64px); }
+  .galeria h2 .destaque { color: var(--cor-terracota); }
+  .galeria .carrossel {
+    padding-left: max(var(--margem), calc((100vw - var(--largura-max)) / 2 + var(--margem)));
+    scroll-padding-left: max(var(--margem), calc((100vw - var(--largura-max)) / 2 + var(--margem)));
+  }
+  .galeria .carrossel::after { content: ""; flex: 0 0 1px; }
+  .galeria__item { margin: 0; }
+  .galeria__item .foto    { height: clamp(320px,48vw,560px); }
+  .galeria__item--h .foto { width: clamp(300px,64vw,840px); }
+  .galeria__item--v .foto { width: clamp(240px,36vw,448px); }
+  .galeria .carrossel-controles { color: var(--cor-terracota); }
+
+  /* ── Localização ───────────────────────────────────────── */
+  .localizacao { padding: clamp(56px,8vw,96px) 0; background: var(--cor-ferro); color: var(--cor-texto-claro); text-align: center; }
+  .localizacao h2 { margin-bottom: 28px; }
+
+  /* ── Endereço (compartilhado) ──────────────────────────── */
+  .endereco { display: flex; gap: 14px; align-items: center; max-width: 26em; margin: 0 auto; font-size: 1rem; color: var(--cor-texto-claro); justify-content: center; }
+  .endereco svg { flex: none; width: 22px; height: 22px; color: var(--cor-pessego); }
+  .endereco__link { color: inherit; text-decoration: underline; text-decoration-color: rgba(234,163,132,.55); text-underline-offset: 4px; transition: color .3s, text-decoration-color .3s; }
+  .endereco__link:hover { color: var(--cor-pessego); text-decoration-color: var(--cor-pessego); }
+
+  /* ── Contato ───────────────────────────────────────────── */
+  .contato { position: relative; padding: var(--secao) 0; background: var(--cor-terracota); color: var(--cor-texto-claro); overflow: hidden; }
+  .contato__grade { position: relative; z-index: 1; display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(40px,6vw,96px); align-items: start; }
+  .contato h2 { margin: 24px 0 24px; }
+  .contato__intro p { color: rgba(244,237,227,.86); font-size: clamp(1.02rem,1.3vw,1.15rem); max-width: 26em; }
+
+  /* ── Formulário ────────────────────────────────────────── */
+  .formulario { background: var(--cor-creme); color: var(--cor-texto); padding: clamp(24px,4vw,48px); display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  #form-campos { display: contents; }
+  .campo { display: flex; flex-direction: column; gap: 8px; }
+  .campo--inteiro { grid-column: 1 / -1; }
+  .campo label { font: 500 .8rem/1.2 var(--fonte-apoio); letter-spacing: .06em; text-transform: uppercase; color: var(--cor-texto-suave); }
+  .campo label .opcional { text-transform: none; letter-spacing: 0; font-weight: 400; }
+  .campo input, .campo select, .campo textarea {
+    width: 100%; min-height: 52px; padding: 14px 16px;
+    font: 400 16px/1.3 var(--fonte-texto); color: var(--cor-texto);
+    background: #fff; border: 1px solid rgba(36,32,28,.22); border-radius: 0;
+    transition: border-color .25s, box-shadow .25s; -webkit-appearance: none; appearance: none;
+  }
+  .campo select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%237a3c24' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
+  .campo textarea { min-height: 112px; resize: vertical; }
+  .campo input:focus, .campo select:focus, .campo textarea:focus { outline: none; border-color: var(--cor-terracota); box-shadow: 0 0 0 3px rgba(122,60,36,.15); }
+  .formulario .botao { grid-column: 1 / -1; width: 100%; margin-top: 8px; }
+  #form-sucesso { display: none; }
+  #form-sucesso.active { display: flex; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; }
+  #form-sucesso p { font-size: 1.1rem; color: var(--cor-texto); }
+
+  /* ── Rodapé ────────────────────────────────────────────── */
+  .rodape { background: var(--cor-ferro); color: rgba(244,237,227,.6); padding: 40px 0 28px; }
+  .rodape__conteudo { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+  .rodape__logo { width: 110px; margin-bottom: 6px; filter: brightness(0) invert(1); }
+  .rodape__direitos, .rodape__credito { margin: 0; font-size: .8rem; }
+  .rodape__credito { display: flex; align-items: center; gap: 10px; }
+  .rodape__dmove { display: block; transition: opacity .25s; }
+  .rodape__dmove:hover { opacity: .75; }
+  .rodape__dmove img { width: 64px; height: auto; }
+
+  /* ── Responsivo ────────────────────────────────────────── */
+  @media (max-width: 959px) {
+    .titulo--secao { font-size: clamp(1.8rem,8vw,2.1rem); }
+    .galeria h2    { font-size: clamp(1.45rem,6.4vw,1.7rem); }
+    section p, .aba__texto > p { line-height: 1.42; }
+    .experiencia__texto h2, .gastronomia h2, .contato h2 { margin-bottom: 14px; }
+    .gastronomia__texto { text-align: center; }
+    .gastronomia__traco { display: none; }
+    .diferenciais .legenda, .galeria .legenda { display: flex; width: fit-content; margin-left: auto; margin-right: auto; }
+    .diferenciais h2, .galeria h2 { text-align: center; margin-left: auto; margin-right: auto; }
+    .contato__intro { text-align: center; }
+    .contato__intro p { margin-left: auto; margin-right: auto; }
+    .gastronomia p  { margin-left: auto; margin-right: auto; margin-bottom: 24px; }
+    .gastronomia .botao { min-height: 40px; padding: 10px 18px; font-size: .72rem; }
+    .slides__pontos { justify-content: center; }
+    .slides__seta {
+      display: grid; place-items: center; position: absolute; z-index: 2; top: 50%; transform: translateY(-50%);
+      width: 40px; height: 40px; padding: 0; border-radius: 50%; cursor: pointer;
+      background: rgba(36,32,28,.45); color: var(--cor-creme); border: 1px solid rgba(244,237,227,.55);
+      -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+    }
+    .slides__seta--anterior { left: 12px; }
+    .slides__seta--proxima  { right: 12px; }
+    .hero { min-height: 100svh; align-items: center; padding-bottom: 0; }
+    .hero__foto::before { background: linear-gradient(180deg, rgba(36,32,28,.2) 0%, rgba(36,32,28,.62) 28%, rgba(36,32,28,.78) 50%, rgba(36,32,28,.62) 72%, rgba(36,32,28,.35) 100%); }
+    .hero__foto img { transform: scale(1.18); transform-origin: 50% 95%; }
+    .hero__flamula { width: 100%; margin: 0; padding: 0 22px; text-align: center; animation: none; }
+    .hero__flamula::before, .hero__flamula::after { display: none; }
+    .hero__logo { width: 84px; margin: 0 auto 18px; }
+    .hero .titulo--grande { font-size: clamp(1.85rem,8.4vw,2.3rem); }
+    .hero h1 { margin-bottom: 14px; }
+    .hero__texto { border-left: 0; padding: 0; margin: 0 auto 22px; font-size: .88rem; }
+    .hero .botao { min-height: 40px; padding: 10px 18px; font-size: .72rem; }
+    .experiencia__grade, .gastronomia__grade, .contato__grade { grid-template-columns: 1fr; }
+    .experiencia__midia { margin-right: 28px; }
+    .abas { grid-template-columns: 1fr; gap: 24px; }
+    .abas__fotos { order: -1; aspect-ratio: 4/3; }
+    .gastronomia__midia { order: 2; }
+    .localizacao { text-align: center; }
+  }
+  @media (max-width: 640px) {
+    .tempo { grid-template-columns: 1fr; gap: 16px; padding: 0; }
+    .tempo::before { left: calc(50% - .5px); right: auto; top: 0; bottom: 0; width: 1px; height: auto; }
+    .tempo::after  { left: calc(50% - 1.5px); right: auto; top: 0; bottom: 0; width: 3px; height: auto; transform: scaleY(0); transform-origin: top; }
+    .tempo.ativo::after { transform: none; }
+    .tempo__item { width: 50%; padding: 0 22px 0 0; text-align: right; }
+    .tempo__item:nth-child(even) { margin-left: 50%; padding: 0 0 0 22px; text-align: left; }
+    .tempo__ponto { top: 16px; left: auto; right: -6.5px; }
+    .tempo__item:nth-child(even) .tempo__ponto { right: auto; left: -6.5px; }
+    .tempo__num    { font-size: 2.6rem; }
+    .tempo__rotulo { font-size: .74rem; letter-spacing: .05em; white-space: nowrap; }
+    .rodape__logo  { width: 96px; }
+    .formulario { grid-template-columns: 1fr 1fr; gap: 10px; padding: 18px 14px; }
+    .campo { gap: 4px; min-width: 0; }
+    .campo label { font-size: .66rem; letter-spacing: .04em; }
+    .campo input, .campo select, .campo textarea { min-height: 42px; padding: 9px 11px; }
+    .campo select { padding-right: 30px; background-position: right 11px center; }
+    .campo textarea { min-height: 64px; }
+    .formulario .botao { min-height: 44px; margin-top: 4px; font-size: .78rem; }
+  }
+</style>
+
+<!-- 01 · HERO -->
+<section class="hero" id="topo">
+  <div class="hero__foto foto foto--escura">
+    <img
+      src={p('PHOTO-2025-05-19-11-04-48-scaled.webp')}
+      alt="Salão da Villa Pacaembu com mesas postas e decoração para casamento"
+      width="1537" height="1023"
+      loading="eager" fetchpriority="high"
+    />
+  </div>
+  <div class="hero__flamula">
+    <img class="hero__logo anima-entrada" src={LOGO} alt="Villa Pacaembu" width="606" height="400" />
+    <h1 class="titulo titulo--grande anima-entrada">
+      Seu casamento em uma <span class="destaque">casa histórica</span>
+    </h1>
+    <p class="hero__texto anima-entrada">
+      Arquitetura rústica e ambientes integrados para <br class="br-mobile" />celebrar a cerimônia e a festa em um só lugar.
+    </p>
+    <a class="botao anima-entrada" href="#contato">Solicite orçamento</a>
+  </div>
+</section>
+
+<!-- 02 · AUTORIDADE -->
+<section class="autoridade" id="autoridade" aria-label="Números da Villa Pacaembu">
+  <div class="container">
+    <ol class="tempo" data-tempo>
+      <li class="tempo__item" style="--i:0">
+        <span class="tempo__ponto" aria-hidden="true"></span>
+        <span class="tempo__mascara"><span class="tempo__num">+11</span></span>
+        <span class="tempo__rotulo">anos de história</span>
+      </li>
+      <li class="tempo__item" style="--i:1">
+        <span class="tempo__ponto" aria-hidden="true"></span>
+        <span class="tempo__mascara"><span class="tempo__num">+1.000</span></span>
+        <span class="tempo__rotulo">eventos realizados</span>
+      </li>
+      <li class="tempo__item" style="--i:2">
+        <span class="tempo__ponto" aria-hidden="true"></span>
+        <span class="tempo__mascara"><span class="tempo__num">até 250</span></span>
+        <span class="tempo__rotulo">convidados</span>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- 03 · EXPERIÊNCIA 360° -->
+<section class="experiencia" id="experiencia">
+  <div class="container experiencia__grade">
+    <div class="experiencia__texto">
+      <span class="legenda revela">Experiência 360°</span>
+      <h2 class="titulo titulo--secao titulo--escuro revela">
+        Da cerimônia à festa, <span class="destaque">tudo no mesmo lugar</span>
+      </h2>
+      <p class="revela atraso-1">
+        Na Villa Pacaembu, seu casamento ganha um cenário cheio de personalidade, com arquitetura rústica, gastronomia própria e estrutura completa. São dois ambientes integrados para celebrar a cerimônia e a festa no mesmo lugar, com conforto e praticidade em uma localização estratégica na Barra Funda.
+      </p>
+    </div>
+    <div class="experiencia__midia">
+      <div class="foto revela-foto">
+        <video autoplay muted loop playsinline preload="none" aria-label="Vídeo do espaço da Villa Pacaembu para casamentos">
+          <source src={p('pacaembu.webm')} type="video/webm" />
+          <source src={p('pacaembu.mp4')}  type="video/mp4" />
+        </video>
+      </div>
+      <span class="experiencia__cota" aria-hidden="true"></span>
+    </div>
+  </div>
+</section>
+
+<!-- 04 · DIFERENCIAIS -->
+<section class="diferenciais" id="diferenciais">
+  <div class="container">
+    <span class="legenda revela">Estrutura</span>
+    <h2 class="titulo titulo--secao titulo--escuro revela" style="margin-top:20px">
+      O charme de uma casa <span class="destaque">cheia de personalidade</span>
+    </h2>
+    <div class="abas revela atraso-1" data-abas>
+      <div class="abas__lista">
+        <div class="aba ativo">
+          <h3><button class="aba__botao" type="button" id="aba-1" aria-controls="aba-texto-1" aria-expanded="true"><span class="aba__numero">01</span><span class="aba__titulo">Arquitetura rústica e marcante</span></button></h3>
+          <div class="aba__texto" id="aba-texto-1"><p>Pé-direito de quase 7 metros, tijolinhos aparentes e arquitetura rústica dão personalidade ao ambiente e criam um cenário acolhedor para celebrar o casamento.</p></div>
+          <span class="aba__barra" aria-hidden="true"></span>
+        </div>
+        <div class="aba">
+          <h3><button class="aba__botao" type="button" id="aba-2" aria-controls="aba-texto-2" aria-expanded="false"><span class="aba__numero">02</span><span class="aba__titulo">Dois ambientes integrados</span></button></h3>
+          <div class="aba__texto" id="aba-texto-2"><p>Realize a cerimônia e a festa no mesmo espaço, com ambientes que permitem organizar os diferentes momentos do casamento sem deslocar os convidados para outro local.</p></div>
+          <span class="aba__barra" aria-hidden="true"></span>
+        </div>
+        <div class="aba">
+          <h3><button class="aba__botao" type="button" id="aba-3" aria-controls="aba-texto-3" aria-expanded="false"><span class="aba__numero">03</span><span class="aba__titulo">Espaço noiva</span></button></h3>
+          <div class="aba__texto" id="aba-texto-3"><p>Com cerca de 70 m², o camarim conta com lounge, bancada de maquiagem, banheira de imersão e vitral original dos anos 1930 para uma preparação reservada antes da celebração.</p></div>
+          <span class="aba__barra" aria-hidden="true"></span>
+        </div>
+        <div class="aba">
+          <h3><button class="aba__botao" type="button" id="aba-4" aria-controls="aba-texto-4" aria-expanded="false"><span class="aba__numero">04</span><span class="aba__titulo">Decoração personalizada</span></button></h3>
+          <div class="aba__texto" id="aba-texto-4"><p>Projetos exclusivos que valorizam o estilo do casal e transformam os ambientes para refletir a identidade da celebração.</p></div>
+          <span class="aba__barra" aria-hidden="true"></span>
+        </div>
+      </div>
+      <div class="abas__fotos">
+        <img class="ativo" src={p('villa-pacaembu.webp')}                                                         alt="Arquitetura rústica da Villa Pacaembu com pé-direito alto e tijolinhos aparentes" width="1600" height="1066" loading="lazy" />
+        <img              src={p('Vogel_0013.jpg.jpeg')}                                                           alt="Dois ambientes integrados da Villa Pacaembu para cerimônia e festa" width="1600" height="1066" loading="lazy" />
+        <img              src={p('ep2-230_13_379169-168929624268431.webp')}                                        alt="Espaço noiva da Villa Pacaembu com bancada e lounge" width="1600" height="1066" loading="lazy" />
+        <img              src={p('SaveClip.App_758427489_18020490806886030_974099976674597101_n.jpg')}             alt="Decoração personalizada para casamento na Villa Pacaembu" width="1600" height="1066" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 · GASTRONOMIA -->
+<section class="gastronomia" id="gastronomia">
+  <img class="gastronomia__traco" src={TRACO} alt="" aria-hidden="true" />
+  <div class="container gastronomia__grade">
+    <div class="gastronomia__midia">
+      <div class="foto foto--escura revela-foto slides" data-slides>
+        <img class="ativo" src={p('WhatsApp-Image-2026-05-02-at-14.00.35-1-1.jpg')} alt="Mesa posta com gastronomia para casamento na Villa Pacaembu" width="1600" height="1064" loading="lazy" />
+        <img src={p('WhatsApp-Image-2026-05-02-at-14.00.25-1.webp')}                 alt="Prato elaborado pela gastronomia da Villa Pacaembu" width="1600" height="1064" loading="lazy" />
+        <img src={p('WhatsApp-Image-2026-05-02-at-14.00.36.webp')}                   alt="Detalhes do cardápio para casamentos na Villa Pacaembu" width="1600" height="1064" loading="lazy" />
+        <img src={p('Vogel_0016.jpg')}                                                alt="Mesa de doces e sobremesas para casamento" width="1600" height="1064" loading="lazy" />
+        <img src={p('Vogel_0020.jpg')}                                                alt="Prato principal servido no casamento" width="1600" height="1064" loading="lazy" />
+        <img src={p('Vogel_0015.jpg')}                                                alt="Entrada fina preparada pela gastronomia própria" width="1600" height="1064" loading="lazy" />
+        <img src={p('Vogel_0021.jpg')}                                                alt="Buffet elegante para evento de casamento" width="1600" height="1064" loading="lazy" />
+        <img src={p('Vogel_0031.jpg')}                                                alt="Mesa de bolo e doces personalizados" width="1600" height="1064" loading="lazy" />
+        <button class="slides__seta slides__seta--anterior" type="button" data-slide-anterior aria-label="Foto anterior"><svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11 3L5 9l6 6"/></svg></button>
+        <button class="slides__seta slides__seta--proxima"  type="button" data-slide-proxima  aria-label="Próxima foto"><svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 3l6 6-6 6"/></svg></button>
+      </div>
+      <div class="slides__pontos">
+        {Array.from({length: 8}, (_, i) => (
+          <button type="button" class={`slides__ponto${i === 0 ? ' ativo' : ''}`} aria-label={`Foto ${i+1} de 8`}></button>
+        ))}
+      </div>
+    </div>
+    <div class="gastronomia__texto">
+      <span class="legenda legenda--clara revela">Gastronomia própria</span>
+      <h2 class="titulo titulo--secao revela">Sabores que também <span class="destaque">fazem parte da celebração</span></h2>
+      <p class="revela atraso-1">
+        A experiência do casamento também acontece à mesa. A Villa Pacaembu conta com gastronomia própria e cardápios elaborados para acompanhar o estilo da celebração, reunindo sabores e opções que tornam o momento ainda mais especial.
+      </p>
+      <a class="botao revela atraso-2" href="#contato">Solicite orçamento</a>
+    </div>
+  </div>
+</section>
+
+<!-- 06 · DEPOIMENTOS -->
+<section class="depoimentos" id="depoimentos">
+  <div class="container">
+    <div class="depoimentos__cabecalho">
+      <span class="legenda legenda--clara revela">Avaliações no Google</span>
+      <h2 class="titulo titulo--secao revela" style="margin:20px auto clamp(40px,5vw,64px)">
+        Histórias de quem <span class="destaque">celebrou com a gente</span>
+      </h2>
+    </div>
+    <div class="carrossel" data-carrossel="depoimentos" aria-label="Depoimentos" tabindex="0">
+      <figure class="depoimento">
+        <span class="depoimento__estrelas" aria-label="5 de 5 estrelas">★★★★★</span>
+        <blockquote>A gastronomia que já era incrível, agora está mil vezes melhor. […] Há uma novidade no espaço que os convidados amam, que é a projeção mapeada, que faz muita diferença.</blockquote>
+        <figcaption>Laura Arcos Mendes Assessoria</figcaption>
+      </figure>
+      <figure class="depoimento">
+        <span class="depoimento__estrelas" aria-label="5 de 5 estrelas">★★★★★</span>
+        <blockquote>Fomos super bem atendidos desde o começo. […] A decoração ficou maravilhosa, a comida estava muito gostosa e todos os convidados elogiaram a organização e o local.</blockquote>
+        <figcaption>Pimentel</figcaption>
+      </figure>
+      <figure class="depoimento">
+        <span class="depoimento__estrelas" aria-label="5 de 5 estrelas">★★★★★</span>
+        <blockquote>Lugar aprazível e espaçoso. Fui muito bem atendida, do momento da contratação do espaço até a finalização da festa. Tudo gostoso (o chef é nota 1000), bem decorado e organizado.</blockquote>
+        <figcaption>Lívia Prado</figcaption>
+      </figure>
+      <figure class="depoimento">
+        <span class="depoimento__estrelas" aria-label="5 de 5 estrelas">★★★★★</span>
+        <blockquote>Lá é incrível! Local bem estruturado. Coordenação acolhedora. Buffet incrível, a comida é maravilhosa. […] Ambiente aconchegante!</blockquote>
+        <figcaption>Luana Faustino</figcaption>
+      </figure>
+    </div>
+    <div class="carrossel-controles">
+      <div class="carrossel-progresso" aria-hidden="true"><span data-progresso="depoimentos"></span></div>
+      <div class="carrossel-botoes">
+        <button class="carrossel-botao" type="button" data-anterior="depoimentos" aria-label="Depoimento anterior">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M11 3L5 9l6 6"/></svg>
+        </button>
+        <button class="carrossel-botao" type="button" data-proximo="depoimentos" aria-label="Próximo depoimento">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 3l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · GALERIA -->
+<section class="galeria" id="galeria">
+  <div class="container">
+    <span class="legenda revela">Galeria</span>
+    <h2 class="titulo titulo--escuro revela" style="margin-top:20px">
+      Veja como seu casamento pode <span class="destaque">ganhar vida aqui</span>
+    </h2>
+  </div>
+  <div class="carrossel" data-carrossel="galeria" aria-label="Galeria de fotos do casamento" tabindex="0">
+    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('Thays_Vinicius_0712.jpg.jpeg')}                                                     alt="Casamento na Villa Pacaembu" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--v"><div class="foto"><img src={p('Thays_Vinicius_0599.jpg.jpeg')}                                                     alt="Casal no salão histórico da Villa Pacaembu" width="1065" height="1600" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('SaveClip.App_620994074_17996214968886030_2458472328085461207_n.jpg')}              alt="Cerimônia de casamento na Villa Pacaembu" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--v"><div class="foto"><img src={p('SaveClip.App_723238836_18116403337848003_2744753157841346761_n.jpg')}              alt="Decoração floral na Villa Pacaembu" width="1065" height="1600" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('SaveClip.App_724156620_18116403247848003_5080097022153595543_n.jpg')}              alt="Festa de casamento na Villa Pacaembu" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--v"><div class="foto"><img src={p('Talita_Taylor-1544.jpg')}                                                           alt="Noivos no espaço histórico da Villa Pacaembu" width="1065" height="1600" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('SaveClip.App_725393801_18116403328848003_6442488785247780150_n.jpg')}              alt="Pista de dança e celebração na Villa Pacaembu" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--v"><div class="foto"><img src={p('Debora_Renan_0928.jpg')}                                                            alt="Casamento com decoração personalizada na Villa Pacaembu" width="1065" height="1600" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('Talita_Taylor-0977.jpg')}                                                           alt="Ambientes integrados para cerimônia e festa na Villa Pacaembu" width="1600" height="1065" loading="lazy" /></div></figure>
+  </div>
+  <div class="container">
+    <div class="carrossel-controles">
+      <div class="carrossel-progresso" aria-hidden="true"><span data-progresso="galeria"></span></div>
+      <div class="carrossel-botoes">
+        <button class="carrossel-botao" type="button" data-anterior="galeria" aria-label="Foto anterior">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M11 3L5 9l6 6"/></svg>
+        </button>
+        <button class="carrossel-botao" type="button" data-proximo="galeria" aria-label="Próxima foto">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 3l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 · LOCALIZAÇÃO -->
+<section class="localizacao" id="localizacao">
+  <div class="container">
+    <h2 class="titulo titulo--secao revela">
+      Uma casa histórica <span class="destaque">em São Paulo</span>
+    </h2>
+    <p class="endereco revela atraso-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+      <a class="endereco__link" href="https://www.google.com/maps/search/?api=1&query=R.+James+Holland,+228+-+Barra+Funda,+S%C3%A3o+Paulo+-+SP,+01138-000" target="_blank" rel="noopener" title="Abrir no Google Maps">
+        R. James Holland, 228 - Barra Funda,<br />São Paulo - SP, 01138-000
+      </a>
+    </p>
+  </div>
+</section>
+
+<!-- 09 · CONTATO -->
+<section class="contato" id="contato">
+  <div class="container contato__grade">
+    <div class="contato__intro">
+      <span class="legenda legenda--clara revela">Orçamento</span>
+      <h2 class="titulo titulo--secao revela">
+        Vamos celebrar <span class="destaque">essa história juntos?</span>
+      </h2>
+      <p class="revela atraso-1">Preencha o formulário e, em breve, <br class="br-mobile" />nosso time entrará em contato com você.</p>
+    </div>
+
+    <form
+      class="formulario revela atraso-1"
+      data-form-id="lead-form-casamentos"
+      data-submit-url={submitUrl}
+      data-grid-id="form-campos"
+      data-success-id="form-sucesso"
+    >
+      <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none;" />
+      <div id="form-campos" style="display:contents">
+        {campos.map((campo) => (
+          <div class={`campo${campo.full ? ' campo--inteiro' : ''}`}>
+            <label for={`form-field-${campo.name}`}>
+              {campo.label}
+              {campo.hint && <span class="opcional"> ({campo.hint})</span>}
+            </label>
+            {campo.type === 'select' ? (
+              <select
+                id={`form-field-${campo.name}`}
+                name={campo.name}
+                required={campo.required}
+              >
+                {campo.options?.map((opt) => (
+                  <option
+                    value={opt.value}
+                    disabled={opt.disabled}
+                    selected={opt.selected}
+                  >{opt.label}</option>
+                ))}
+              </select>
+            ) : campo.type === 'textarea' ? (
+              <textarea
+                id={`form-field-${campo.name}`}
+                name={campo.name}
+                required={campo.required}
+                rows={3}
+                placeholder={campo.placeholder}
+              />
+            ) : (
+              <input
+                id={`form-field-${campo.name}`}
+                name={campo.name}
+                type={campo.type}
+                required={campo.required}
+                placeholder={campo.placeholder}
+                autocomplete={
+                  campo.name === 'nome'     ? 'name'  :
+                  campo.name === 'email'    ? 'email' :
+                  campo.name === 'telefone' ? 'tel'   : undefined
+                }
+                data-datepicker={campo.datepicker ? '' : undefined}
+              />
+            )}
+          </div>
+        ))}
+        <button class="botao botao--escuro" type="submit">Solicitar orçamento</button>
+      </div>
+      <div id="form-sucesso">
+        <p>Obrigado! Em breve nossa equipe entrará em contato.</p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- RODAPÉ -->
+<footer class="rodape">
+  <div class="container rodape__conteudo">
+    <img class="rodape__logo" src={LOGO} alt="Villa Pacaembu" width="606" height="400" loading="lazy" />
+    <p class="rodape__direitos">© <span data-ano>2026</span> Villa Pacaembu. Todos os direitos reservados.</p>
+    <p class="rodape__credito">
+      Desenvolvido por
+      <a class="rodape__dmove" href="https://dmove.com.br" target="_blank" rel="noopener">
+        <img src={p('logo-dmove.webp')} alt="Dmove" width="600" height="134" loading="lazy" />
+      </a>
+    </p>
+  </div>
+</footer>
+
+<script>
+  import { init } from '../scripts/eventos-corporativos';
+  import { initForms } from '../scripts/forms';
+  import 'flatpickr/dist/flatpickr.min.css';
+  init();
+  initForms();
+</script>
+
+</Base>
