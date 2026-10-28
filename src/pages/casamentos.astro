@@ -107,15 +107,14 @@ const jsonLd = {
 
   /* ── Experiência ───────────────────────────────────────── */
   .experiencia { padding: var(--secao) 0; }
-  .experiencia__grade { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(40px,7vw,112px); align-items: center; }
+  .experiencia__grade { display: grid; grid-template-columns: 1fr; gap: clamp(32px,5vw,56px); }
   .experiencia__texto .legenda { margin-bottom: 24px; }
   .experiencia__texto h2 { margin-bottom: 28px; }
-  .experiencia__texto p  { font-size: clamp(1.02rem,1.3vw,1.15rem); color: var(--cor-texto-suave); max-width: 34em; }
+  .experiencia__texto p  { font-size: clamp(1.02rem,1.3vw,1.15rem); color: var(--cor-texto-suave); max-width: 56em; }
   .experiencia__midia { position: relative; }
   .experiencia__midia .foto { aspect-ratio: 16 / 9; }
   .experiencia__midia .foto > video { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .experiencia__cota { position: absolute; right: -28px; top: 0; bottom: 0; width: 12px; border-top: 1px solid var(--cor-oliva); border-bottom: 1px solid var(--cor-oliva); }
-  .experiencia__cota::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--cor-oliva); }
+  .experiencia__cota { display: none; }
 
   /* ── Diferenciais ──────────────────────────────────────── */
   .diferenciais { padding: var(--secao) 0; background: var(--cor-creme-escuro); }
