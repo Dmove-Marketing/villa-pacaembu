@@ -581,7 +581,7 @@ const jsonLd = {
                 name={campo.name}
                 type={campo.type}
                 required={campo.required}
-                placeholder={campo.placeholder}
+                placeholder={campo.name === 'email' ? 'voce@email.com.br' : campo.placeholder}
                 autocomplete={
                   campo.name === 'nome'     ? 'name'  :
                   campo.name === 'email'    ? 'email' :
