@@ -112,7 +112,7 @@ const jsonLd = {
   .experiencia__texto h2 { margin-bottom: 28px; }
   .experiencia__texto p  { font-size: clamp(1.02rem,1.3vw,1.15rem); color: var(--cor-texto-suave); max-width: 34em; }
   .experiencia__midia { position: relative; }
-  .experiencia__midia .foto { aspect-ratio: 4 / 5; }
+  .experiencia__midia .foto { aspect-ratio: 16 / 9; }
   .experiencia__midia .foto > video { width: 100%; height: 100%; object-fit: cover; display: block; }
   .experiencia__cota { position: absolute; right: -28px; top: 0; bottom: 0; width: 12px; border-top: 1px solid var(--cor-oliva); border-bottom: 1px solid var(--cor-oliva); }
   .experiencia__cota::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--cor-oliva); }
@@ -392,7 +392,7 @@ const jsonLd = {
       </div>
       <div class="abas__fotos">
         <img class="ativo" src={p('villa-pacaembu.webp')}                                                         alt="Arquitetura rústica da Villa Pacaembu com pé-direito alto e tijolinhos aparentes" width="1600" height="1066" loading="lazy" />
-        <img              src={p('Vogel_0013.webp')}                                                               alt="Dois ambientes integrados da Villa Pacaembu para cerimônia e festa" width="1600" height="1066" loading="lazy" />
+        <img              src={p('Vogel_0013.jpg.webp')}                                                           alt="Dois ambientes integrados da Villa Pacaembu para cerimônia e festa" width="1600" height="1066" loading="lazy" />
         <img              src={p('ep2-230_13_379169-168929624268431.webp')}                                        alt="Espaço noiva da Villa Pacaembu com bancada e lounge" width="1600" height="1066" loading="lazy" />
         <img              src={p('SaveClip.App_758427489_18020490806886030_974099976674597101_n.webp')}            alt="Decoração personalizada para casamento na Villa Pacaembu" width="1600" height="1066" loading="lazy" />
       </div>
@@ -488,14 +488,14 @@ const jsonLd = {
     </h2>
   </div>
   <div class="carrossel" data-carrossel="galeria" aria-label="Galeria de fotos do casamento" tabindex="0">
-    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('Thays_Vinicius_0712.webp')}                                                         alt="Casamento na Villa Pacaembu" width="1600" height="1065" loading="lazy" /></div></figure>
-    <figure class="galeria__item galeria__item--v"><div class="foto"><img src={p('Thays_Vinicius_0599.webp')}                                                         alt="Casal no salão histórico da Villa Pacaembu" width="1065" height="1600" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('Thays_Vinicius_0712.jpg.webp')}                                                     alt="Casamento na Villa Pacaembu" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--v"><div class="foto"><img src={p('Thays_Vinicius_0599.jpg.webp')}                                                     alt="Casal no salão histórico da Villa Pacaembu" width="1065" height="1600" loading="lazy" /></div></figure>
     <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('SaveClip.App_620994074_17996214968886030_2458472328085461207_n.webp')}              alt="Cerimônia de casamento na Villa Pacaembu" width="1600" height="1065" loading="lazy" /></div></figure>
     <figure class="galeria__item galeria__item--v"><div class="foto"><img src={p('SaveClip.App_723238836_18116403337848003_2744753157841346761_n.webp')}              alt="Decoração floral na Villa Pacaembu" width="1065" height="1600" loading="lazy" /></div></figure>
-    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('SaveClip.App_724156620_18116403247848003_5080097022153595543_n.webp')}              alt="Festa de casamento na Villa Pacaembu" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('SaveClip.App_724156620_18116403247848003_5080097022153595543_n.webp')} style="object-position: center top" alt="Festa de casamento na Villa Pacaembu" width="1600" height="1065" loading="lazy" /></div></figure>
     <figure class="galeria__item galeria__item--v"><div class="foto"><img src={p('Talita_Taylor-1544.webp')}                                                           alt="Noivos no espaço histórico da Villa Pacaembu" width="1065" height="1600" loading="lazy" /></div></figure>
-    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('SaveClip.App_725393801_18116403328848003_6442488785247780150_n.webp')}              alt="Pista de dança e celebração na Villa Pacaembu" width="1600" height="1065" loading="lazy" /></div></figure>
-    <figure class="galeria__item galeria__item--v"><div class="foto"><img src={p('Debora_Renan_0928.webp')}                                                            alt="Casamento com decoração personalizada na Villa Pacaembu" width="1065" height="1600" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('SaveClip.App_725393801_18116403328848003_6442488785247780150_n.webp')} style="object-position: center top" alt="Pista de dança e celebração na Villa Pacaembu" width="1600" height="1065" loading="lazy" /></div></figure>
+    <figure class="galeria__item galeria__item--v"><div class="foto"><img src={p('Debora_Renan_0928.webp')} style="object-position: right center"                    alt="Casamento com decoração personalizada na Villa Pacaembu" width="1065" height="1600" loading="lazy" /></div></figure>
     <figure class="galeria__item galeria__item--h"><div class="foto"><img src={p('Talita_Taylor-0977.webp')}                                                           alt="Ambientes integrados para cerimônia e festa na Villa Pacaembu" width="1600" height="1065" loading="lazy" /></div></figure>
   </div>
   <div class="container">
