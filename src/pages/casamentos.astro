@@ -7,6 +7,7 @@ const CDN   = config.media.cdn_base;
 const LOGO  = `${CDN}/photos/logo-villa-pacaembu.svg`;
 const TRACO = `${CDN}/photos/traco-empena.svg`;
 const p     = (n: string) => `${CDN}/photos/${n}`;
+const v     = (n: string) => `${CDN}/videos/${n}`;
 
 const submitUrl = config.forms['lead-form'].webhooks[0];
 const campos    = getPreset('social');
@@ -350,8 +351,8 @@ const jsonLd = {
     <div class="experiencia__midia">
       <div class="foto revela-foto">
         <video autoplay muted loop playsinline preload="none" aria-label="Vídeo do espaço da Villa Pacaembu para casamentos">
-          <source src={p('pacaembu.webm')} type="video/webm" />
-          <source src={p('pacaembu.mp4')}  type="video/mp4" />
+          <source src={v('pacaembu.webm')} type="video/webm" />
+          <source src={v('pacaembu.mp4')}  type="video/mp4" />
         </video>
       </div>
       <span class="experiencia__cota" aria-hidden="true"></span>
