@@ -20,7 +20,7 @@
       "preset": "social",
       "redirect_on_success": "",
       "webhooks": [
-        "https://server3n8n.dmove.com.br/webhook/villa-pacaembu"
+        "https://server3n8n.dmove.com.br/webhook/pacaembu-lp"
       ]
     }
   },
