@@ -47,23 +47,24 @@ const jsonLd = {
     overflow: hidden;
   }
   .hero__foto { position: absolute; inset: 0; height: 100%; }
+  .hero__foto img { object-position: 62% 12%; }
   .hero__foto::before {
     content: ""; position: absolute; inset: 0; z-index: 1;
     background: linear-gradient(180deg, rgba(36,32,28,.15) 0%, rgba(36,32,28,.05) 50%, rgba(36,32,28,.55) 100%);
   }
   .hero__flamula {
     position: relative; z-index: 3;
-    width: min(46%, 600px); margin-left: auto; margin-right: 6vw;
+    width: min(46%, 600px); margin-right: auto; margin-left: 6vw;
     padding: clamp(32px,4.5vh,52px) clamp(32px,4vw,60px) clamp(96px,14vh,150px);
     animation: flamula-desce 1.3s var(--transicao) .15s both;
   }
   .hero__flamula::before, .hero__flamula::after {
     content: ""; position: absolute; left: 0; right: 0; top: 0;
-    clip-path: polygon(0 0, 100% 0, 100% 74%, 0 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 74%);
   }
   .hero__flamula::before {
     bottom: -4px; background: var(--cor-pessego);
-    clip-path: polygon(0 calc(100% - 4px), 100% calc(74% - 3px), 100% 74%, 0 100%);
+    clip-path: polygon(0 calc(74% - 3px), 100% calc(100% - 4px), 100% 100%, 0 74%);
   }
   .hero__flamula::after {
     bottom: 0; background: rgba(122,60,36,.86);
