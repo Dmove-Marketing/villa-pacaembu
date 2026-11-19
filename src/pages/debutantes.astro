@@ -60,11 +60,11 @@ const jsonLd = {
   }
   .hero__flamula::before, .hero__flamula::after {
     content: ""; position: absolute; left: 0; right: 0; top: 0;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 74%);
+    clip-path: polygon(0 0, 100% 0, 100% 74%, 0 100%);
   }
   .hero__flamula::before {
     bottom: -4px; background: var(--cor-pessego);
-    clip-path: polygon(0 calc(74% - 3px), 100% calc(100% - 4px), 100% 100%, 0 74%);
+    clip-path: polygon(0 calc(100% - 4px), 100% calc(74% - 3px), 100% 74%, 0 100%);
   }
   .hero__flamula::after {
     bottom: 0; background: rgba(122,60,36,.86);
